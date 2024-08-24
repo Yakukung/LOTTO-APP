@@ -66,48 +66,57 @@ class _NavBottomState extends State<NavBottom> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 105, // Adjusted height for the navigation bar
-      color: Colors.transparent,
-      child: Theme(
-        data: ThemeData(
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            selectedLabelStyle: TextStyle(
-              fontFamily: 'SukhumvitSet',
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+        child: Container(
+          height: 105, // Adjusted height for the navigation bar
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+          ),
+          child: Theme(
+            data: ThemeData(
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                selectedLabelStyle: TextStyle(
+                  fontFamily: 'SukhumvitSet',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+                unselectedLabelStyle: TextStyle(
+                  fontFamily: 'SukhumvitSet',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
             ),
-            unselectedLabelStyle: TextStyle(
-              fontFamily: 'SukhumvitSet',
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+            child: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Colors.black,
+              unselectedItemColor: Colors.black.withOpacity(0.3),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.house_rounded),
+                  label: 'หน้าหลัก',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.confirmation_number),
+                  label: 'ตรวจฉลาก',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.shopping_basket),
+                  label: 'ตะกร้า',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.account_balance_wallet),
+                  label: 'Wallet',
+                ),
+              ],
             ),
           ),
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.black.withOpacity(0.3),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.house_rounded),
-              label: 'หน้าหลัก',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.confirmation_number),
-              label: 'ตรวจฉลาก',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_basket),
-              label: 'ตะกร้า',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_balance_wallet),
-              label: 'Wallet',
-            ),
-          ],
         ),
       ),
     );

@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/config/internal_config.dart';
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
+import 'package:lotto_app/pages/intro.dart';
 import 'package:lotto_app/sidebar/CustomerSidebar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -116,15 +118,38 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Color(0xFF000000),
                         iconSize: 35.0,
                       ),
-                      Text(
-                        user.fullname,
-                        style: TextStyle(
-                          fontFamily: 'SukhumvitSet',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Color(0xFF000000),
+                      SizedBox(
+                        width: 115, // Adjust width to fit content
+                        height: 35,
+                        child: FilledButton(
+                          onPressed: deleteUser,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .center, // Center content horizontally
+                            children: [
+                              Icon(Icons.delete_rounded,
+                                  color: Color(0xFFF92A47), size: 18),
+                              SizedBox(
+                                  width:
+                                      3), // Add some space between icon and text
+                              Text('ลบบัญชีผู้ใช้',
+                                  style: TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    color: Color(0xFFF92A47),
+                                  )), // Ensure text color matches
+                            ],
+                          ),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Color(0xFFFFFFFF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -137,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(height: 30),
+                      SizedBox(height: 50),
                       Container(
                         width: 164,
                         height: 164,
@@ -511,8 +536,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 controller: imageCtl,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F7),
-                                  hintText: '${user.image}',
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.image == null ||
+                                          user.image!.trim().isEmpty
+                                      ? 'ใส่ Url รูปภาพที่นี่'
+                                      : user.image,
                                   hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
@@ -590,15 +618,28 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> saveEdit() async {
+    // Validate input fields
+    if (usernameCtl.text.trim().isEmpty ||
+        fullnameCtl.text.trim().isEmpty ||
+        emailCtl.text.trim().isEmpty ||
+        phoneCtl.text.trim().isEmpty ||
+        passwordCtl.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('กรุณากรอกข้อมูลให้ครบถ้วน')),
+      );
+      return; // Exit the function if validation fails
+    }
+
     var config = await Configuration.getConfig();
     var url = config['apiEndpoint'];
     var body = jsonEncode({
-      'username': usernameCtl.text,
-      'fullname': fullnameCtl.text,
-      'email': emailCtl.text,
-      'phone': phoneCtl.text,
-      'password': passwordCtl.text,
-      'image': imageCtl.text,
+      'username': usernameCtl.text.trim(),
+      'fullname': fullnameCtl.text.trim(),
+      'email': emailCtl.text.trim(),
+      'phone': phoneCtl.text.trim(),
+      'password': passwordCtl.text.trim(),
+      'image':
+          imageCtl.text.trim(), // 'image' can be null or empty, as it's allowed
     });
 
     var res = await http.put(
@@ -613,7 +654,7 @@ class _ProfilePageState extends State<ProfilePage> {
         const SnackBar(content: Text('อัพเดตข้อมูลเรียบร้อย')),
       );
       setState(() {
-        loadDataUser = fetchUserData(); // รีเฟรชข้อมูลหลังจากบันทึก
+        loadDataUser = fetchUserData();
       });
     } else {
       log('อัพเดตข้อมูลไม่ได้');
@@ -621,6 +662,121 @@ class _ProfilePageState extends State<ProfilePage> {
         SnackBar(content: Text('อัพเดตข้อมูลไม่ได้ : ${res.reasonPhrase}')),
       );
     }
+  }
+
+  Future<void> deleteUser() async {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            Container(
+              height: 230,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(35),
+                  topRight: Radius.circular(35),
+                ),
+              ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Text(
+                    'ยืนยันลบบัญชีผู้ใช้',
+                    style: TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'คุณต้องการลบบัญชีผู้ใช้ใช่ไหม?',
+                    style: TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'ยกเลิก',
+                          style: TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          final response = await http.delete(
+                            Uri.parse(
+                                '$API_ENDPOINT/customers/detail/delete/${widget.uid}'),
+                          );
+                          if (response.statusCode == 200) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => IntroPage(),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Failed to delete account')),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'ลบบัญชีผู้ใช้',
+                          style: TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
