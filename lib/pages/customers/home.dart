@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
     loadDataUser = fetchUserData();
     loadDataLotto = fetchAllLotto();
     loadDataLottoPrize = loadDataLottoPrizeAsync();
-    loadDataLottoType = fetchLottoTypes();
   }
 
   @override
@@ -260,8 +259,8 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         ),
-                        FutureBuilder<List<LottoTypeGetResponse>>(
-                          future: loadDataLottoType,
+                        FutureBuilder<List<LottoGetResponse>>(
+                          future: loadDataLotto,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -601,17 +600,6 @@ class _HomePageState extends State<HomePage> {
       return data.map((item) => LottoGetResponse.fromJson(item)).toList();
     } else {
       throw Exception('Failed to load lotto prize data');
-    }
-  }
-
-  Future<List<LottoTypeGetResponse>> fetchLottoTypes() async {
-    var config = await Configuration.getConfig();
-    var res = await http.get(Uri.parse('${config['apiEndpoint']}/lotto'));
-    if (res.statusCode == 200) {
-      List<dynamic> data = jsonDecode(res.body);
-      return data.map((item) => LottoTypeGetResponse.fromJson(item)).toList();
-    } else {
-      throw Exception('Failed to load lotto types');
     }
   }
 
