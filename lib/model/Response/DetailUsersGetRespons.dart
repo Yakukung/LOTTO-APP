@@ -1,46 +1,50 @@
+// To parse this JSON data, do
+//
+//     final detailUsersGetRespons = detailUsersGetResponsFromJson(jsonString);
+
 import 'dart:convert';
 
-List<UsersLoginPostResponse> usersLoginPostResponseFromJson(String str) =>
-    List<UsersLoginPostResponse>.from(
-        json.decode(str).map((x) => UsersLoginPostResponse.fromJson(x)));
+List<DetailUsersGetRespons> detailUsersGetResponsFromJson(String str) =>
+    List<DetailUsersGetRespons>.from(
+        json.decode(str).map((x) => DetailUsersGetRespons.fromJson(x)));
 
-String usersLoginPostResponseToJson(List<UsersLoginPostResponse> data) =>
+String detailUsersGetResponsToJson(List<DetailUsersGetRespons> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class UsersLoginPostResponse {
+class DetailUsersGetRespons {
   int uid;
   String fullname;
   String username;
   String email;
   String phone;
+  String password;
   int type;
   int wallet;
   String? image;
-  String? password; // Add password field
 
-  UsersLoginPostResponse({
+  DetailUsersGetRespons({
     required this.uid,
     required this.fullname,
     required this.username,
     required this.email,
     required this.phone,
+    required this.password,
     required this.type,
     required this.wallet,
-    this.image,
-    this.password, // Initialize password
+    required this.image,
   });
 
-  factory UsersLoginPostResponse.fromJson(Map<String, dynamic> json) =>
-      UsersLoginPostResponse(
+  factory DetailUsersGetRespons.fromJson(Map<String, dynamic> json) =>
+      DetailUsersGetRespons(
         uid: json["uid"],
         fullname: json["fullname"],
         username: json["username"],
         email: json["email"],
         phone: json["phone"],
+        password: json["password"],
         type: json["type"],
         wallet: json["wallet"],
         image: json["image"],
-        password: json["password"], // Parse password
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,9 +53,9 @@ class UsersLoginPostResponse {
         "username": username,
         "email": email,
         "phone": phone,
+        "password": password,
         "type": type,
         "wallet": wallet,
         "image": image,
-        "password": password, // Include password
       };
 }

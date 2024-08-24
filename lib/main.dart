@@ -11,7 +11,6 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Colors.black, // สีพื้นหลังของ Status Bar
-      statusBarIconBrightness: Brightness.light, // สีของไอคอนใน Status Bar
     ),
   );
 

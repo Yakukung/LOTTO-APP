@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
           final user = snapshot.data!;
           return CustomerSidebar(
             imageUrl: user.image ?? '',
-            username: user.username,
+            fullname: user.fullname,
             uid: user.uid,
             currentPage: 'home',
           );
@@ -119,10 +119,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Text(
-                                '${user.username}',
+                                '${user.fullname}',
                                 style: TextStyle(
                                   fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                   fontSize: 30,
                                   color: Color(0xFF000000),
                                 ),

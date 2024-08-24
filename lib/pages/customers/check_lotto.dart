@@ -49,7 +49,7 @@ class _CheckLottoState extends State<CheckLotto> {
             final user = snapshot.data!;
             return CustomerSidebar(
               imageUrl: user.image ?? '',
-              username: user.username,
+              fullname: user.fullname,
               uid: user.uid,
               currentPage: 'check_lotto',
             );

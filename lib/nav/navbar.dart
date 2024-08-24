@@ -32,15 +32,21 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               GestureDetector(
                 onTap: () => scaffoldKey.currentState?.openDrawer(),
-                child: SizedBox(
+                child: Container(
                   width: 55,
                   height: 55,
-                  child: user.image != null
-                      ? Image.network(user.image!,
-                          width: 55, height: 55, fit: BoxFit.cover)
-                      : ClipOval(
-                          child: Image.asset('assets/logo/mc.png',
-                              fit: BoxFit.cover)),
+                  child: ClipOval(
+                    child: (user.image?.isNotEmpty ?? false) &&
+                            Uri.tryParse(user.image ?? '')?.isAbsolute == true
+                        ? Image.network(
+                            user.image!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return _buildDefaultImage();
+                            },
+                          )
+                        : _buildDefaultImage(),
+                  ),
                 ),
               ),
               ShaderMask(
@@ -69,6 +75,21 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildDefaultImage() {
+    return Center(
+      child: SizedBox(
+        width: 100,
+        height: 100,
+        child: ClipOval(
+          child: Image.asset(
+            'assets/logo/mc.png',
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }

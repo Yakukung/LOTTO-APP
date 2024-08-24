@@ -11,14 +11,14 @@ import 'package:lotto_app/pages/intro.dart';
 
 class CustomerSidebar extends StatelessWidget {
   final String imageUrl;
-  final String username;
+  final String fullname;
   final int uid;
   final String currentPage;
 
   const CustomerSidebar({
     super.key,
     required this.imageUrl,
-    required this.username,
+    required this.fullname,
     required this.uid,
     required this.currentPage,
   });
@@ -68,32 +68,35 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(left: customPadding, top: 20, bottom: 10),
+                      EdgeInsets.only(left: customPadding, top: 20, bottom: 20),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          SizedBox(
+                          Container(
                             width: 100,
                             height: 100,
-                            child: imageUrl.isNotEmpty &&
-                                    Uri.tryParse(imageUrl)?.isAbsolute == true
-                                ? Image.network(
-                                    imageUrl,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return _buildDefaultImage();
-                                    },
-                                  )
-                                : _buildDefaultImage(),
+                            child: ClipOval(
+                              child: imageUrl.isNotEmpty &&
+                                      Uri.tryParse(imageUrl)?.isAbsolute == true
+                                  ? Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return _buildDefaultImage();
+                                      },
+                                    )
+                                  : _buildDefaultImage(),
+                            ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 10),
                       Text(
-                        username,
+                        fullname,
                         style: TextStyle(
                           fontFamily: 'SukhumvitSet',
                           fontWeight: FontWeight.bold,
@@ -130,7 +133,9 @@ class CustomerSidebar extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ProfilePage(uid: uid)),
+                          builder: (context) => ProfilePage(
+                                uid: uid,
+                              )),
                     );
                   },
                 ),
