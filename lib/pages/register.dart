@@ -36,6 +36,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    log(isPortrait ? 'Portrait' : 'Landscape');
+    double customPadding = isPortrait ? 35.0 : 70.0;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -71,17 +75,17 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 70),
         decoration: BoxDecoration(
           color: Colors.white,
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding:
-                const EdgeInsets.only(top: 50, left: 35, right: 35, bottom: 50),
+            padding: EdgeInsets.only(
+                top: 50, left: customPadding, right: customPadding, bottom: 50),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 70),
                 Text(
                   'ลงทะเบียน',
                   style: TextStyle(

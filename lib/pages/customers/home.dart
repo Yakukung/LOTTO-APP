@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
@@ -38,6 +39,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    log(isPortrait ? 'Portrait' : 'Landscape');
+    double customPadding = isPortrait ? 20.0 : 60.0;
+
+    double cardWidth = isPortrait
+        ? (MediaQuery.of(context).size.width / 2) - 20
+        : (MediaQuery.of(context).size.width / 3) - 60;
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -122,7 +132,8 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(height: 16),
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          padding: EdgeInsets.only(
+                              left: customPadding, right: customPadding),
                           child: TextField(
                             controller: searchCtl,
                             decoration: InputDecoration(
@@ -170,8 +181,8 @@ class _HomePageState extends State<HomePage> {
                             }
 
                             return Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 30, right: 30),
+                              padding: EdgeInsets.only(
+                                  left: customPadding, right: customPadding),
                               child: ListView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
@@ -277,7 +288,7 @@ class _HomePageState extends State<HomePage> {
                                 .toList();
 
                             return Padding(
-                              padding: const EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.only(left: customPadding),
                               child: Wrap(
                                 spacing: 8,
                                 runSpacing: 8,
@@ -356,9 +367,7 @@ class _HomePageState extends State<HomePage> {
                                     .toList()
                                     .map((lotto) {
                                   return Container(
-                                    width: (MediaQuery.of(context).size.width /
-                                            2) -
-                                        20,
+                                    width: cardWidth,
                                     height: 150,
                                     decoration: BoxDecoration(
                                       color: Color(0xFFF5F5F7),

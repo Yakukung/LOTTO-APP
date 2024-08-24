@@ -25,6 +25,11 @@ class CustomerSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    log(isPortrait ? 'Portrait' : 'Landscape');
+    double customPadding = isPortrait ? 20.0 : 60.0;
+
     return FractionallySizedBox(
       alignment: Alignment.topLeft,
       widthFactor: 0.7,
@@ -62,7 +67,8 @@ class CustomerSidebar extends StatelessWidget {
                   elevation: 0,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  padding:
+                      EdgeInsets.only(left: customPadding, top: 20, bottom: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,6 +106,7 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.house_rounded,
                   text: 'หน้าหลัก',
                   page: 'home',
@@ -114,6 +121,7 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.person_rounded,
                   text: 'ข้อมูลส่วนตัว',
                   page: 'profile',
@@ -128,6 +136,7 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.confirmation_number,
                   text: 'ตรวจฉลาก',
                   page: 'check_lotto', // เพิ่มค่า page
@@ -142,6 +151,7 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.local_mall_rounded,
                   text: 'LOTTO ของฉัน',
                   page: 'my_lotto', // เพิ่มค่า page
@@ -156,6 +166,7 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.shopping_basket_rounded,
                   text: 'ตะกร้า',
                   page: 'basket', // เพิ่มค่า page
@@ -170,6 +181,7 @@ class CustomerSidebar extends StatelessWidget {
                 ),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.wallet,
                   text: 'Wallet',
                   page: 'wallet', // เพิ่มค่า page
@@ -186,6 +198,7 @@ class CustomerSidebar extends StatelessWidget {
                 SizedBox(height: 50),
                 _buildMenuItem(
                   context,
+                  customPadding: customPadding,
                   icon: Icons.logout_rounded,
                   text: 'ออกจากระบบ',
                   page: 'logout', // เพิ่มค่า page
@@ -202,7 +215,8 @@ class CustomerSidebar extends StatelessWidget {
   }
 
   Widget _buildMenuItem(BuildContext context,
-      {required IconData icon,
+      {required double customPadding,
+      required IconData icon,
       required String text,
       required String page,
       required VoidCallback onTap}) {
@@ -211,7 +225,7 @@ class CustomerSidebar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15),
+        padding: EdgeInsets.only(left: customPadding, right: customPadding),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
