@@ -8,7 +8,8 @@ String lottoGetResponseToJson(LottoGetResponse data) =>
     json.encode(data.toJson());
 
 class LottoGetResponse {
-  int prize; // Added this field
+  int prize;
+  int wallet_prize;
   int number;
   String type;
   int price;
@@ -17,7 +18,8 @@ class LottoGetResponse {
   late String formattedDate;
 
   LottoGetResponse({
-    required this.prize, // Added this field
+    required this.prize,
+    required this.wallet_prize,
     required this.number,
     required this.type,
     required this.price,
@@ -30,18 +32,19 @@ class LottoGetResponse {
 
   factory LottoGetResponse.fromJson(Map<String, dynamic> json) {
     return LottoGetResponse(
-      prize: json["prize"] ?? 0, // Default value if null
-      number: json["number"] ?? 0, // Default value if null
-      type: json["type"] ?? '', // Default empty string if null
-      price: json["price"] ?? 0, // Default value if null
-      date: json["date"] ??
-          DateTime.now().toString(), // Default to current date if null
-      lottoQuantity: json["lotto_quantity"] ?? 0, // Default value if null
+      prize: json["prize"] ?? 0,
+      wallet_prize: json["wallet_prize"] ?? 0,
+      number: json["number"] ?? 0,
+      type: json["type"] ?? '',
+      price: json["price"] ?? 0,
+      date: json["date"] ?? DateTime.now().toString(),
+      lottoQuantity: json["lotto_quantity"] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
         "prize": prize,
+        "wallet_prize": wallet_prize,
         "number": number,
         "type": type,
         "price": price,

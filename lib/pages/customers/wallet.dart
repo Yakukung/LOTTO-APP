@@ -28,6 +28,10 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    double customPadding = isPortrait ? 20.0 : 60.0;
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -57,6 +61,179 @@ class _WalletPageState extends State<WalletPage> {
             return Drawer(child: Center(child: Text('No data available')));
           }
         },
+      ),
+      body: SingleChildScrollView(
+        child: FutureBuilder<UsersLoginPostResponse>(
+          future: loadDataUser,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            if (!snapshot.hasData) {
+              return Center(child: Text('No data available'));
+            }
+
+            final user = snapshot.data!;
+
+            return Column(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFEAAC8B),
+                        Color(0xFFE88C7D),
+                        Color(0xFFEE5566),
+                        Color(0xFFB56576),
+                        Color(0xFF6D597A),
+                        Color(0xFF355070),
+                      ],
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                    ),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 8),
+                        Text('${user.wallet.toStringAsFixed(2)}',
+                            style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 52,
+                                color: Color(0xFFFFFFFF))),
+                        Text('ยอดวอเล็ตคงเหลือ',
+                            style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Color(0xFFFFFFFF))),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: customPadding, top: 15, right: customPadding),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: customPadding, right: 60),
+                            child: SizedBox(
+                              child: Column(
+                                children: [
+                                  ShaderMask(
+                                    shaderCallback: (bounds) => LinearGradient(
+                                      colors: [
+                                        Color(0xFFEAAC8B),
+                                        Color(0xFFE88C7D),
+                                        Color(0xFFEE5566),
+                                        Color(0xFFB56576),
+                                        Color(0xFF6D597A),
+                                        Color(0xFF355070),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ).createShader(bounds),
+                                    child: Icon(
+                                      Icons.account_balance_wallet_outlined,
+                                      size: 45,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text('เติมเงิน',
+                                      style: TextStyle(
+                                          fontFamily: 'SukhumvitSet',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Color(0xFF000000)))
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            child: Column(
+                              children: [
+                                ShaderMask(
+                                  shaderCallback: (bounds) => LinearGradient(
+                                    colors: [
+                                      Color(0xFFEAAC8B),
+                                      Color(0xFFE88C7D),
+                                      Color(0xFFEE5566),
+                                      Color(0xFFB56576),
+                                      Color(0xFF6D597A),
+                                      Color(0xFF355070),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ).createShader(bounds),
+                                  child: Icon(
+                                    Icons.currency_exchange_outlined,
+                                    size: 45,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text('โอนเงิน',
+                                    style: TextStyle(
+                                        fontFamily: 'SukhumvitSet',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Color(0xFF000000)))
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Text('รายการย้อนหลัง',
+                                  style: TextStyle(
+                                      fontFamily: 'SukhumvitSet',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: Color(0xFFF92A47)))
+                            ],
+                          ),
+                          Container(
+                            color: Color(0xFFF5F5F7),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [],
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
       bottomNavigationBar: NavBottom(
         uid: widget.uid,

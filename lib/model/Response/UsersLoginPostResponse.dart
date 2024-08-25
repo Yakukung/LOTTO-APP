@@ -14,9 +14,9 @@ class UsersLoginPostResponse {
   String email;
   String phone;
   int type;
-  int wallet;
+  double wallet; // ใช้ double สำหรับ wallet
   String? image;
-  String? password; // Add password field
+  String? password;
 
   UsersLoginPostResponse({
     required this.uid,
@@ -27,7 +27,7 @@ class UsersLoginPostResponse {
     required this.type,
     required this.wallet,
     this.image,
-    this.password, // Initialize password
+    this.password,
   });
 
   factory UsersLoginPostResponse.fromJson(Map<String, dynamic> json) =>
@@ -38,9 +38,11 @@ class UsersLoginPostResponse {
         email: json["email"],
         phone: json["phone"],
         type: json["type"],
-        wallet: json["wallet"],
+        wallet: json["wallet"] is int
+            ? (json["wallet"] as int).toDouble()
+            : (json["wallet"] as double), // ตรวจสอบประเภทและแปลงตามความเหมาะสม
         image: json["image"],
-        password: json["password"], // Parse password
+        password: json["password"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -50,8 +52,8 @@ class UsersLoginPostResponse {
         "email": email,
         "phone": phone,
         "type": type,
-        "wallet": wallet,
+        "wallet": wallet, // เก็บเป็น double
         "image": image,
-        "password": password, // Include password
+        "password": password,
       };
 }

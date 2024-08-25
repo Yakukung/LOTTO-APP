@@ -548,13 +548,43 @@ class _HomePageState extends State<HomePage> {
   Future<List<LottoGetResponse>> loadDataLottoPrizeAsync() async {
     var config = await Configuration.getConfig();
     var res = await http.get(Uri.parse('${config['apiEndpoint']}/lotto-prize'));
+
     if (res.statusCode == 200) {
       List<dynamic> data = jsonDecode(res.body);
       List<LottoGetResponse> allLottoData =
           data.map((item) => LottoGetResponse.fromJson(item)).toList();
 
+      // ดึงวันที่ล่าสุด
+      DateTime getMostRecentDate(List<LottoGetResponse> dataList) {
+        DateTime mostRecentDate = DateTime.fromMillisecondsSinceEpoch(0);
+
+        for (var data in dataList) {
+          final date = DateTime.parse(data.date);
+          if (date.isAfter(mostRecentDate)) {
+            mostRecentDate = date;
+          }
+        }
+
+        return mostRecentDate;
+      }
+
+      List<LottoGetResponse> filterDataByDate(
+          List<LottoGetResponse> dataList, DateTime mostRecentDate) {
+        return dataList
+            .where((data) =>
+                DateTime.parse(data.date).isAtSameMomentAs(mostRecentDate))
+            .toList();
+      }
+
+      DateTime mostRecentDate = getMostRecentDate(allLottoData);
+
+      List<LottoGetResponse> filteredDataList =
+          filterDataByDate(allLottoData, mostRecentDate);
+
+      // กรองข้อมูลล็อตเตอรี่ที่รางวัลที่ 1
       List<LottoGetResponse> firstPrizeList =
-          allLottoData.where((lotto) => lotto.prize == 1).toList();
+          filteredDataList.where((lotto) => lotto.prize == 1).toList();
+
       return firstPrizeList;
     } else {
       throw Exception('Failed to load lotto data');

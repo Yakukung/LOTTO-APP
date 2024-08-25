@@ -99,19 +99,31 @@ class _NavBottomState extends State<NavBottom> {
               elevation: 0,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.house_rounded),
+                  icon: Icon(
+                    Icons.house_rounded,
+                    size: 30.0,
+                  ),
                   label: 'หน้าหลัก',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.confirmation_number),
+                  icon: Icon(
+                    Icons.confirmation_number,
+                    size: 30.0,
+                  ),
                   label: 'ตรวจฉลาก',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.shopping_basket),
+                  icon: Icon(
+                    Icons.shopping_basket,
+                    size: 30.0,
+                  ),
                   label: 'ตะกร้า',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.account_balance_wallet),
+                  icon: Icon(
+                    Icons.wallet_rounded,
+                    size: 30.0,
+                  ),
                   label: 'Wallet',
                 ),
               ],
