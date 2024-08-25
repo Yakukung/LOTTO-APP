@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
 import 'dart:ui'; // สำหรับการใช้ BackdropFilter
 
@@ -26,7 +25,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
         ),
         AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white.withOpacity(0.2),
           elevation: 0,
           title: FutureBuilder<UsersLoginPostResponse>(
             future: loadDataUser,

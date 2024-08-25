@@ -642,26 +642,126 @@ class _ProfilePageState extends State<ProfilePage> {
           imageCtl.text.trim(), // 'image' can be null or empty, as it's allowed
     });
 
-    var res = await http.put(
-      Uri.parse('$url/customers/detail/update/${widget.uid}'),
-      headers: {'Content-Type': 'application/json'},
-      body: body,
-    );
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            Container(
+              height: 280,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(35),
+                  topRight: Radius.circular(35),
+                ),
+              ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Text(
+                    'ยืนยันอัพเดตข้อมูลผู้ใช้',
+                    style: TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'คุณต้องการอัพเดตข้อมูลใช่ไหม?',
+                    style: TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'ยกเลิก',
+                          style: TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          var res = await http.put(
+                            Uri.parse(
+                                '$url/customers/detail/update/${widget.uid}'),
+                            headers: {'Content-Type': 'application/json'},
+                            body: body,
+                          );
 
-    if (res.statusCode == 200) {
-      log('อัพเดตข้อมูลเรียบร้อย');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('อัพเดตข้อมูลเรียบร้อย')),
-      );
-      setState(() {
-        loadDataUser = fetchUserData();
-      });
-    } else {
-      log('อัพเดตข้อมูลไม่ได้');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('อัพเดตข้อมูลไม่ได้ : ${res.reasonPhrase}')),
-      );
-    }
+                          if (res.statusCode == 200) {
+                            log('อัพเดตข้อมูลเรียบร้อย');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('อัพเดตข้อมูลเรียบร้อย')),
+                            );
+                            setState(() {
+                              loadDataUser = fetchUserData();
+                            });
+                            Navigator.of(context).pop();
+                          } else {
+                            log('อัพเดตข้อมูลไม่ได้');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'อัพเดตข้อมูลไม่ได้ : ${res.reasonPhrase}')),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'อัพเดตข้อมูลผู้ใช้',
+                          style: TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> deleteUser() async {
@@ -680,7 +780,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Container(
-              height: 230,
+              height: 280,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -720,7 +820,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -734,7 +834,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             fontFamily: 'SukhumvitSet',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.blue,
+                            color: Colors.black,
                           ),
                         ),
                       ),

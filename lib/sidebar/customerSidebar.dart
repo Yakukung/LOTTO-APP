@@ -296,7 +296,7 @@ class CustomerSidebar extends StatelessWidget {
               ),
             ),
             Container(
-              height: 230,
+              height: 280,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -336,7 +336,7 @@ class CustomerSidebar extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -350,7 +350,7 @@ class CustomerSidebar extends StatelessWidget {
                             fontFamily: 'SukhumvitSet',
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
-                            color: Colors.blue,
+                            color: Colors.black,
                           ),
                         ),
                       ),
