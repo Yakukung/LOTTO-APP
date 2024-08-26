@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/internal_config.dart';
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
@@ -19,6 +18,7 @@ class BasketPage extends StatefulWidget {
 class _BasketPageState extends State<BasketPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Future<UsersLoginPostResponse> loadDataUser;
+  bool selectAll = false;
 
   @override
   void initState() {
@@ -28,6 +28,9 @@ class _BasketPageState extends State<BasketPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    double customPadding = isPortrait ? 20.0 : 60.0;
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
@@ -57,6 +60,142 @@ class _BasketPageState extends State<BasketPage> {
             return Drawer(child: Center(child: Text('No data available')));
           }
         },
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(customPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'ตะกร้าสินค้า',
+                  style: TextStyle(
+                    fontFamily: 'SukhumvitSet',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 28,
+                    color: Color(0xFF000000),
+                  ),
+                ),
+                Text(
+                  'เลือกซื้อล็อตเตอรี่ที่คุณเพิ่มมาได้เลย!',
+                  style: TextStyle(
+                    fontFamily: 'SukhumvitSet',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    color: Color(0xFF6C6C6C),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Container(
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: selectAll,
+                      onChanged: (value) {
+                        setState(() {
+                          selectAll = value!;
+                        });
+                      },
+                      fillColor: WidgetStateProperty.resolveWith((states) {
+                        if (states.contains(WidgetState.selected)) {
+                          return Color(0xFFF92A47);
+                        }
+                        return Colors.transparent;
+                      }),
+                    ),
+                    Text(
+                      'เลือกทั้งหมด',
+                      style: TextStyle(
+                        fontFamily: 'SukhumvitSet',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        color: Color(0xFF000000),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Spacer(),
+          Padding(
+            padding: EdgeInsets.all(customPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  width: 200,
+                  height: 130,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'รวมทั้งหมด',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: Color(0xFFFFFFFF),
+                              ),
+                            ),
+                            Text(
+                              '฿400.00',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                color: Color(0xFFF92A47),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 178, // Adjust width to fit content
+                              height: 30,
+                              child: FilledButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'ชำระเงิน',
+                                  style: TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFFFFFFFF),
+                                  ),
+                                ),
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: NavBottom(
         uid: widget.uid,
