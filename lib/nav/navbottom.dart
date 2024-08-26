@@ -16,7 +16,7 @@ class NavBottom extends StatefulWidget {
 }
 
 class _NavBottomState extends State<NavBottom> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
 
   @override
   void initState() {
@@ -30,6 +30,7 @@ class _NavBottomState extends State<NavBottom> {
         _selectedIndex = index;
       });
 
+      // Replace current route with the new route
       switch (index) {
         case 0:
           Navigator.pushReplacement(
@@ -70,13 +71,13 @@ class _NavBottomState extends State<NavBottom> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
         child: Container(
-          height: 105, // Adjusted height for the navigation bar
+          height: 90,
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.1),
           ),
           child: Theme(
             data: ThemeData(
-              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                 selectedLabelStyle: TextStyle(
                   fontFamily: 'SukhumvitSet',
                   fontWeight: FontWeight.bold,

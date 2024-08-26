@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
         expand: true,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(45)),
             ),
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller: scrollController,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 0),
+                    margin: const EdgeInsets.only(top: 0),
                     child: Center(
                       child: Container(
                         width: 80,
@@ -63,8 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 35),
-                  Column(
+                  const SizedBox(height: 35),
+                  const Column(
                     children: [
                       Text(
                         'ยินดีต้อนรับกลับ',
@@ -85,19 +85,19 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 35),
+                  const SizedBox(height: 35),
                   TextField(
                     controller: usernameOrEmailCtl,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xFFF5F5F7),
+                      fillColor: const Color(0xFFF5F5F7),
                       hintText: 'ชื่อผู้ใช้ หรือ ที่อยู่อีเมล',
                       hintStyle: const TextStyle(
                         fontFamily: 'SukhumvitSet',
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.person,
                         color: Colors.black,
                       ),
@@ -112,20 +112,20 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   TextField(
                     controller: passwordCtl,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xFFF5F5F7),
+                      fillColor: const Color(0xFFF5F5F7),
                       hintText: 'รหัสผ่าน',
                       hintStyle: const TextStyle(
                         fontFamily: 'SukhumvitSet',
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
-                      prefixIcon: Icon(Icons.lock, color: Colors.black),
+                      prefixIcon: const Icon(Icons.lock, color: Colors.black),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureText
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {},
-                      child: Text(
+                      child: const Text(
                         'ลืมรหัสผ่าน?',
                         style: TextStyle(
                           fontFamily: 'SukhumvitSet',
@@ -162,7 +162,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   FilledButton(
                     onPressed: login,
-                    child: Text(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFFF92A47),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    child: const Text(
                       'เข้าสู่ระบบ',
                       style: TextStyle(
                         fontFamily: 'SukhumvitSet',
@@ -171,15 +178,8 @@ class _LoginPageState extends State<LoginPage> {
                         color: Color(0xFFFFFFFF),
                       ),
                     ),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Color(0xFFF92A47),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      minimumSize: Size(double.infinity, 50),
-                    ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Row(
                     children: [
                       Expanded(
@@ -189,10 +189,10 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          margin: EdgeInsets.only(right: 8),
+                          margin: const EdgeInsets.only(right: 8),
                         ),
                       ),
-                      Text(
+                      const Text(
                         'หรือ ดำเนินต่อด้วยวิธีอื่น',
                         style: TextStyle(
                           fontFamily: 'SukhumvitSet',
@@ -207,12 +207,12 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          margin: EdgeInsets.only(left: 8),
+                          margin: const EdgeInsets.only(left: 8),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -228,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       CircleAvatar(
                         backgroundColor: Colors.transparent,
                         radius: 24,
@@ -241,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       CircleAvatar(
                         backgroundColor: Colors.transparent,
                         radius: 24,
@@ -370,11 +370,11 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     AnimatedCheckmark(isSuccess: false),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
-                      child: Text(
+                      child: const Text(
                         ' เข้าสู่ระบบไม่สำเร็จ',
                         style: TextStyle(
                           fontFamily: 'SukhumvitSet',
@@ -384,22 +384,22 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       message,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'SukhumvitSet',
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                         color: Color(0xFF000000),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Column(
                       children: [
                         Container(
                           height: 1,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xffB3B3B3),
                           ),
                         ),
@@ -409,7 +409,7 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextButton(
-                                child: Text(
+                                child: const Text(
                                   'ตกลง',
                                   style: TextStyle(
                                     fontFamily: 'SukhumvitSet',

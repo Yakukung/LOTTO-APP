@@ -45,9 +45,9 @@ class CustomerSidebar extends StatelessWidget {
             ),
           ),
           Container(
-            color: Color(0xFFF5F5F7).withOpacity(0.85),
+            color: const Color(0xFFF5F5F7).withOpacity(0.85),
             child: ListView(
-              physics: ClampingScrollPhysics(),
+              physics: const ClampingScrollPhysics(),
               padding: EdgeInsets.zero,
               children: [
                 AppBar(
@@ -55,7 +55,7 @@ class CustomerSidebar extends StatelessWidget {
                   leading: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: IconButton(
-                      icon: Icon(Icons.cancel),
+                      icon: const Icon(Icons.cancel),
                       color: Colors.black,
                       iconSize: 50,
                       onPressed: () {
@@ -75,7 +75,7 @@ class CustomerSidebar extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                             width: 100,
                             height: 100,
                             child: ClipOval(
@@ -94,10 +94,10 @@ class CustomerSidebar extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         fullname,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'SukhumvitSet',
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
@@ -199,8 +199,8 @@ class CustomerSidebar extends StatelessWidget {
                     );
                   },
                 ),
-                Divider(),
-                SizedBox(height: 50),
+                const Divider(),
+                const SizedBox(height: 50),
                 _buildMenuItem(
                   context,
                   customPadding: customPadding,
@@ -232,7 +232,7 @@ class CustomerSidebar extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(left: customPadding, right: customPadding),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
             color: isSelected ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(15),
@@ -246,7 +246,7 @@ class CustomerSidebar extends StatelessWidget {
                 color: isSelected ? Colors.black : Colors.black,
                 size: 38,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 text,
                 style: TextStyle(
@@ -297,14 +297,14 @@ class CustomerSidebar extends StatelessWidget {
             ),
             Container(
               height: 280,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(35),
                   topRight: Radius.circular(35),
                 ),
               ),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -316,8 +316,8 @@ class CustomerSidebar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     'ยืนยันออกจากระบบ',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -326,8 +326,8 @@ class CustomerSidebar extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'คุณต้องการออกจากระบบใช่ไหม?',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -336,7 +336,7 @@ class CustomerSidebar extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -344,7 +344,7 @@ class CustomerSidebar extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(
+                        child: const Text(
                           'ยกเลิก',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',
@@ -364,7 +364,7 @@ class CustomerSidebar extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Text(
+                        child: const Text(
                           'ออกจากระบบ',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',

@@ -42,7 +42,8 @@ class _BasketPageState extends State<BasketPage> {
         future: loadDataUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Drawer(child: Center(child: CircularProgressIndicator()));
+            return const Drawer(
+                child: Center(child: CircularProgressIndicator()));
           }
           if (snapshot.hasError) {
             return Drawer(
@@ -57,7 +58,8 @@ class _BasketPageState extends State<BasketPage> {
               currentPage: 'basket',
             );
           } else {
-            return Drawer(child: Center(child: Text('No data available')));
+            return const Drawer(
+                child: Center(child: Text('No data available')));
           }
         },
       ),
@@ -68,7 +70,7 @@ class _BasketPageState extends State<BasketPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'ตะกร้าสินค้า',
                   style: TextStyle(
                     fontFamily: 'SukhumvitSet',
@@ -77,7 +79,7 @@ class _BasketPageState extends State<BasketPage> {
                     color: Color(0xFF000000),
                   ),
                 ),
-                Text(
+                const Text(
                   'เลือกซื้อล็อตเตอรี่ที่คุณเพิ่มมาได้เลย!',
                   style: TextStyle(
                     fontFamily: 'SukhumvitSet',
@@ -86,7 +88,7 @@ class _BasketPageState extends State<BasketPage> {
                     color: Color(0xFF6C6C6C),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
                   height: 3,
                   decoration: BoxDecoration(
@@ -94,7 +96,7 @@ class _BasketPageState extends State<BasketPage> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Checkbox(
@@ -106,12 +108,12 @@ class _BasketPageState extends State<BasketPage> {
                       },
                       fillColor: WidgetStateProperty.resolveWith((states) {
                         if (states.contains(WidgetState.selected)) {
-                          return Color(0xFFF92A47);
+                          return const Color(0xFFF92A47);
                         }
                         return Colors.transparent;
                       }),
                     ),
-                    Text(
+                    const Text(
                       'เลือกทั้งหมด',
                       style: TextStyle(
                         fontFamily: 'SukhumvitSet',
@@ -125,7 +127,7 @@ class _BasketPageState extends State<BasketPage> {
               ],
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Padding(
             padding: EdgeInsets.all(customPadding),
             child: Row(
@@ -146,7 +148,7 @@ class _BasketPageState extends State<BasketPage> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Text(
+                            const Text(
                               'รวมทั้งหมด',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -155,7 +157,7 @@ class _BasketPageState extends State<BasketPage> {
                                 color: Color(0xFFFFFFFF),
                               ),
                             ),
-                            Text(
+                            const Text(
                               '฿400.00',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -169,19 +171,19 @@ class _BasketPageState extends State<BasketPage> {
                               height: 30,
                               child: FilledButton(
                                 onPressed: () {},
-                                child: Text(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: const Text(
                                   'ชำระเงิน',
                                   style: TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: Color(0xFFFFFFFF),
-                                  ),
-                                ),
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
                                   ),
                                 ),
                               ),
@@ -205,8 +207,7 @@ class _BasketPageState extends State<BasketPage> {
   }
 
   Future<UsersLoginPostResponse> fetchUserData(int uid) async {
-    final response =
-        await http.get(Uri.parse('${API_ENDPOINT}/customers/$uid'));
+    final response = await http.get(Uri.parse('$API_ENDPOINT/customers/$uid'));
     if (response.statusCode == 200) {
       return UsersLoginPostResponse.fromJson(jsonDecode(response.body));
     } else {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
@@ -59,7 +60,8 @@ class _HomePageState extends State<HomePage> {
         future: loadDataUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Drawer(child: Center(child: CircularProgressIndicator()));
+            return const Drawer(
+                child: Center(child: CircularProgressIndicator()));
           }
           if (snapshot.hasError) {
             return Drawer(
@@ -78,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         future: loadDataLotto,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -93,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, userSnapshot) {
                     if (userSnapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     if (userSnapshot.hasError) {
                       return Center(
@@ -109,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'ยินดีต้อนรับ กลับมา!',
                                 style: TextStyle(
                                   fontFamily: 'SukhumvitSet',
@@ -119,8 +121,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               Text(
-                                '${user.fullname}',
-                                style: TextStyle(
+                                user.fullname,
+                                style: const TextStyle(
                                   fontFamily: 'SukhumvitSet',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 30,
@@ -130,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Padding(
                           padding: EdgeInsets.only(
                               left: customPadding, right: customPadding),
@@ -138,36 +140,39 @@ class _HomePageState extends State<HomePage> {
                             controller: searchCtl,
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: Color(0xFFF5F5F7),
+                              fillColor: const Color(0xFFF5F5F7),
                               hintText: 'ค้นหาเลขล็อตเตอรี่',
-                              hintStyle: TextStyle(
+                              hintStyle: const TextStyle(
                                 fontFamily: 'SukhumvitSet',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
-                              prefixIcon: Icon(Icons.search_rounded),
+                              prefixIcon: const Icon(Icons.search_rounded),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide: BorderSide.none,
                               ),
                             ),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'SukhumvitSet',
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                             onChanged: (value) {
-                              print('Search query: $value');
+                              if (kDebugMode) {
+                                print('Search query: $value');
+                              }
                             },
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         FutureBuilder<List<LottoGetResponse>>(
                           future: loadDataLottoPrize,
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
                             if (snapshot.hasError) {
                               return Center(
@@ -176,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                             final lottoDataList = snapshot.data ?? [];
 
                             if (lottoDataList.isEmpty) {
-                              return Center(
+                              return const Center(
                                   child: Text('No lottery data available'));
                             }
 
@@ -185,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                   left: customPadding, right: customPadding),
                               child: ListView.builder(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: lottoDataList.length,
                                 itemBuilder: (context, index) {
                                   final lottoData = lottoDataList[index];
@@ -195,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                                     margin:
                                         const EdgeInsets.symmetric(vertical: 8),
                                     decoration: BoxDecoration(
-                                      gradient: LinearGradient(
+                                      gradient: const LinearGradient(
                                         colors: [
                                           Color(0xFFEAAC8B),
                                           Color(0xFFE88C7D),
@@ -219,7 +224,7 @@ class _HomePageState extends State<HomePage> {
                                             children: [
                                               Text(
                                                 lottoData.formattedDate,
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontFamily: 'SukhumvitSet',
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 12,
@@ -230,13 +235,13 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Text(
                                           'รางวัลที่ ${lottoData.prize}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontFamily: 'SukhumvitSet',
                                               fontWeight: FontWeight.w600,
                                               fontSize: 26,
                                               color: Colors.white),
                                         ),
-                                        SizedBox(height: 3),
+                                        const SizedBox(height: 3),
                                         Container(
                                           width: 190,
                                           height: 50,
@@ -253,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                                             children: [
                                               Text(
                                                 '${lottoData.number}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontFamily: 'SukhumvitSet',
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 35,
@@ -275,7 +280,8 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
                             if (snapshot.hasError) {
                               return Center(
@@ -303,7 +309,7 @@ class _HomePageState extends State<HomePage> {
                                         borderRadius: BorderRadius.circular(15),
                                         side: BorderSide.none,
                                       ),
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 16, vertical: 8),
                                       elevation: 0,
                                     ),
@@ -331,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                                               BorderRadius.circular(15),
                                           side: BorderSide.none,
                                         ),
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: 16, vertical: 8),
                                         elevation: 0,
                                       ),
@@ -347,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                     );
-                                  }).toList(),
+                                  }),
                                 ],
                               ),
                             );
@@ -356,165 +362,159 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                            child: Container(
-                              child: Wrap(
-                                spacing: 10,
-                                runSpacing: 10,
-                                children: filteredLottoData
-                                    .where((lotto) =>
-                                        selectedType == 'ทั้งหมด' ||
-                                        lotto.type == selectedType)
-                                    .toList()
-                                    .map((lotto) {
-                                  return Container(
-                                    width: cardWidth,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFF5F5F7),
-                                      borderRadius: BorderRadius.circular(22),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          spreadRadius: 1,
-                                          blurRadius: 3,
-                                          offset: Offset(3, 4),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'หมายเลข',
-                                                style: TextStyle(
+                            child: Wrap(
+                              spacing: 10,
+                              runSpacing: 10,
+                              children: filteredLottoData
+                                  .where((lotto) =>
+                                      selectedType == 'ทั้งหมด' ||
+                                      lotto.type == selectedType)
+                                  .toList()
+                                  .map((lotto) {
+                                return Container(
+                                  width: cardWidth,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF5F5F7),
+                                    borderRadius: BorderRadius.circular(22),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        spreadRadius: 1,
+                                        blurRadius: 3,
+                                        offset: const Offset(3, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'หมายเลข',
+                                              style: TextStyle(
+                                                fontFamily: 'SukhumvitSet',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                                color: Color(0xFF6C6C6C),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 4,
+                                                      horizontal: 8),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFFFFFFF),
+                                                borderRadius:
+                                                    BorderRadius.circular(7),
+                                              ),
+                                              child: Text(
+                                                lotto.type,
+                                                style: const TextStyle(
                                                   fontFamily: 'SukhumvitSet',
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 14,
-                                                  color: Color(0xFF6C6C6C),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 10,
+                                                  color: Color(0xFF000000),
                                                 ),
                                               ),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 4, horizontal: 8),
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFFFFFFFF),
-                                                  borderRadius:
-                                                      BorderRadius.circular(7),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          '${lotto.number}',
+                                          style: const TextStyle(
+                                            fontFamily: 'SukhumvitSet',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24,
+                                            color: Color(0xFF2D2D2D),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.only(top: 8),
+                                          child: Center(
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 2.5,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFFF0000),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'คงเหลือ  ${lotto.lottoQuantity}${lotto.type == 'หวยชุด' ? '  ชุด' : lotto.type == 'หวยเดี่ยว' ? '  ใบ' : ''}',
+                                          style: const TextStyle(
+                                            fontFamily: 'SukhumvitSet',
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 11,
+                                            color: Color(0xFF2D2D2D),
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                const Icon(
+                                                  Icons.wallet,
+                                                  size: 26,
+                                                  color: Color(0xFFF92A47),
                                                 ),
-                                                child: Text(
-                                                  '${lotto.type}',
+                                                Text(
+                                                  '${lotto.price}',
+                                                  style: const TextStyle(
+                                                    fontFamily: 'SukhumvitSet',
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20,
+                                                    color: Color(0xFFF92A47),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: 70,
+                                              height: 27,
+                                              child: ElevatedButton(
+                                                onPressed: () {},
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      const Color(0xFFF92A47),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  padding: EdgeInsets.zero,
+                                                ),
+                                                child: const Text(
+                                                  'เพิ่มลงตะกร้า',
                                                   style: TextStyle(
                                                     fontFamily: 'SukhumvitSet',
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 10,
-                                                    color: Color(0xFF000000),
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          Text(
-                                            '${lotto.number}',
-                                            style: TextStyle(
-                                              fontFamily: 'SukhumvitSet',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 24,
-                                              color: Color(0xFF2D2D2D),
                                             ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(top: 8),
-                                            child: Center(
-                                              child: Container(
-                                                width: double.infinity,
-                                                height: 2.5,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFFFF0000),
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            'คงเหลือ  ${lotto.lottoQuantity}${lotto.type == 'หวยชุด' ? '  ชุด' : lotto.type == 'หวยเดี่ยว' ? '  ใบ' : ''}',
-                                            style: TextStyle(
-                                              fontFamily: 'SukhumvitSet',
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 11,
-                                              color: Color(0xFF2D2D2D),
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.wallet,
-                                                    size: 26,
-                                                    color: Color(0xFFF92A47),
-                                                  ),
-                                                  Text(
-                                                    '${lotto.price}',
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          'SukhumvitSet',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20,
-                                                      color: Color(0xFFF92A47),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: 70,
-                                                height: 27,
-                                                child: ElevatedButton(
-                                                  onPressed: () {},
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Color(0xFFF92A47),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                    padding: EdgeInsets.zero,
-                                                  ),
-                                                  child: Text(
-                                                    'เพิ่มลงตะกร้า',
-                                                    style: TextStyle(
-                                                      fontFamily:
-                                                          'SukhumvitSet',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 10,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                }).toList(),
-                              ),
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ),
                         )

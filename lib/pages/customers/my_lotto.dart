@@ -39,7 +39,8 @@ class _MyLottoPageState extends State<MyLottoPage> {
         future: loadDataUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Drawer(child: Center(child: CircularProgressIndicator()));
+            return const Drawer(
+                child: Center(child: CircularProgressIndicator()));
           }
           if (snapshot.hasError) {
             return Drawer(
@@ -54,7 +55,8 @@ class _MyLottoPageState extends State<MyLottoPage> {
               currentPage: 'my_lotto',
             );
           } else {
-            return Drawer(child: Center(child: Text('No data available')));
+            return const Drawer(
+                child: Center(child: Text('No data available')));
           }
         },
       ),
@@ -66,8 +68,7 @@ class _MyLottoPageState extends State<MyLottoPage> {
   }
 
   Future<UsersLoginPostResponse> fetchUserData(int uid) async {
-    final response =
-        await http.get(Uri.parse('${API_ENDPOINT}/customers/$uid'));
+    final response = await http.get(Uri.parse('$API_ENDPOINT/customers/$uid'));
     if (response.statusCode == 200) {
       return UsersLoginPostResponse.fromJson(jsonDecode(response.body));
     } else {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/config/internal_config.dart';
@@ -48,7 +49,8 @@ class _CheckLottoState extends State<CheckLotto> {
         future: loadDataUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Drawer(child: Center(child: CircularProgressIndicator()));
+            return const Drawer(
+                child: Center(child: CircularProgressIndicator()));
           }
           if (snapshot.hasError) {
             return Drawer(
@@ -63,14 +65,14 @@ class _CheckLottoState extends State<CheckLotto> {
               currentPage: 'check_lotto',
             );
           }
-          return Drawer(child: Center(child: Text('No data available')));
+          return const Drawer(child: Center(child: Text('No data available')));
         },
       ),
       body: FutureBuilder<List<LottoGetResponse>>(
         future: loadDataLottoPrize,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -92,38 +94,40 @@ class _CheckLottoState extends State<CheckLotto> {
                       controller: searchCtl,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Color(0xFFF5F5F7),
+                        fillColor: const Color(0xFFF5F5F7),
                         hintText: 'ตรวจสอบฉลาก',
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           fontFamily: 'SukhumvitSet',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
-                        prefixIcon: Icon(Icons.search_rounded),
+                        prefixIcon: const Icon(Icons.search_rounded),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'SukhumvitSet',
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                       onChanged: (value) {
-                        print('Search query: $value');
+                        if (kDebugMode) {
+                          print('Search query: $value');
+                        }
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Container(
                       height: 3,
                       decoration: BoxDecoration(
-                        color: Color(0xFFF5F5F7),
+                        color: const Color(0xFFF5F5F7),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Row(
+                    const SizedBox(height: 20),
+                    const Row(
                       children: [
                         Text(
                           'ตรวจฉลาก LOTTO ย้อนหลัง',
@@ -136,16 +140,16 @@ class _CheckLottoState extends State<CheckLotto> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ...groupedData.entries.map((entry) {
                       final date = formatDate(entry.key);
                       final items = entry.value;
                       return Container(
                         width: 350,
                         height: 360,
-                        margin: EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 20),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [
                               Color(0xFFEAAC8B),
                               Color(0xFFE88C7D),
@@ -175,7 +179,7 @@ class _CheckLottoState extends State<CheckLotto> {
                                     child: Center(
                                       child: Text(
                                         date, // Use formatted date for the text
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'SukhumvitSet',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 30,
@@ -201,23 +205,23 @@ class _CheckLottoState extends State<CheckLotto> {
                                           children: [
                                             Text(
                                               'รางวัลที่ ${item.prize}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontFamily: 'SukhumvitSet',
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
                                                 color: Color(0xFFFFFFFF),
                                               ),
                                             ),
-                                            SizedBox(width: 10),
+                                            const SizedBox(width: 10),
                                             Row(
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.wallet_rounded,
                                                   color: Colors.white,
                                                 ),
                                                 Text(
                                                   '${item.wallet_prize}',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontFamily: 'SukhumvitSet',
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 14,
@@ -239,7 +243,7 @@ class _CheckLottoState extends State<CheckLotto> {
                                           child: Center(
                                             child: Text(
                                               '${item.number}', // Use formatted date for the text
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontFamily: 'SukhumvitSet',
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
@@ -257,13 +261,13 @@ class _CheckLottoState extends State<CheckLotto> {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
             );
           }
-          return Center(child: Text('No lotto data available'));
+          return const Center(child: Text('No lotto data available'));
         },
       ),
       bottomNavigationBar: NavBottom(
@@ -274,8 +278,7 @@ class _CheckLottoState extends State<CheckLotto> {
   }
 
   Future<UsersLoginPostResponse> fetchUserData(int uid) async {
-    final response =
-        await http.get(Uri.parse('${API_ENDPOINT}/customers/$uid'));
+    final response = await http.get(Uri.parse('$API_ENDPOINT/customers/$uid'));
     if (response.statusCode == 200) {
       return UsersLoginPostResponse.fromJson(jsonDecode(response.body));
     } else {

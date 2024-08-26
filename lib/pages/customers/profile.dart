@@ -55,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (userSnapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             key: _scaffoldKey,
-            body: Center(child: CircularProgressIndicator()),
+            body: const Center(child: CircularProgressIndicator()),
             drawer: CustomerSidebar(
               imageUrl: '',
               fullname: '',
@@ -107,15 +107,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   color: Colors.transparent,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
+                        icon: const Icon(Icons.arrow_back_ios),
                         onPressed: openDrawer,
-                        color: Color(0xFF000000),
+                        color: const Color(0xFF000000),
                         iconSize: 35.0,
                       ),
                       SizedBox(
@@ -123,7 +123,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 35,
                         child: FilledButton(
                           onPressed: deleteUser,
-                          child: Row(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: const Color(0xFFFFFFFF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                          ),
+                          child: const Row(
                             mainAxisAlignment: MainAxisAlignment
                                 .center, // Center content horizontally
                             children: [
@@ -141,13 +148,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )), // Ensure text color matches
                             ],
                           ),
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Color(0xFFFFFFFF),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(13),
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                          ),
                         ),
                       )
                     ],
@@ -162,8 +162,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(height: 50),
-                      Container(
+                      const SizedBox(height: 50),
+                      SizedBox(
                         width: 164,
                         height: 164,
                         child: ClipOval(
@@ -180,13 +180,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               : _buildDefaultImage(),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                             customPadding, 5, customPadding, 5),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               'ชื่อผู้ใช้',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -195,14 +195,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 controller: usernameCtl,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F7),
-                                  hintText: '${user.username}',
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.username,
                                   hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
@@ -223,37 +223,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             SizedBox(
                               width: 50,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: saveEdit,
-                                child: Row(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                ),
+                                child: const Row(
                                   children: [
                                     Icon(Icons.edit_rounded,
                                         color: Colors.white, size: 20),
                                   ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                 ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                             customPadding, 5, customPadding, 5),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               'ชื่อ-สกุล',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -262,14 +263,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 controller: fullnameCtl,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F7),
-                                  hintText: '${user.fullname}',
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.fullname,
                                   hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
@@ -290,37 +291,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             SizedBox(
                               width: 50,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: saveEdit,
-                                child: Row(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                ),
+                                child: const Row(
                                   children: [
                                     Icon(Icons.edit_rounded,
                                         color: Colors.white, size: 20),
                                   ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                 ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                             customPadding, 5, customPadding, 5),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               'อีเมล',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -329,14 +331,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 controller: emailCtl,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F7),
-                                  hintText: '${user.email}',
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.email,
                                   hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
@@ -357,37 +359,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             SizedBox(
                               width: 50,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: saveEdit,
-                                child: Row(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                ),
+                                child: const Row(
                                   children: [
                                     Icon(Icons.edit_rounded,
                                         color: Colors.white, size: 20),
                                   ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                 ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                             customPadding, 5, customPadding, 5),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               'โทรศัพท์',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -396,14 +399,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 controller: phoneCtl,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F7),
-                                  hintText: '${user.phone}',
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.phone,
                                   hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
@@ -424,37 +427,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             SizedBox(
                               width: 50,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: saveEdit,
-                                child: Row(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                ),
+                                child: const Row(
                                   children: [
                                     Icon(Icons.edit_rounded,
                                         color: Colors.white, size: 20),
                                   ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                 ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                             customPadding, 5, customPadding, 5),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               'รหัสผ่าน',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -463,13 +467,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 controller: passwordCtl,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFFF5F5F7),
+                                  fillColor: const Color(0xFFF5F5F7),
                                   hintText: '${user.password}',
                                   hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
@@ -491,37 +495,38 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             SizedBox(
                               width: 50,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: saveEdit,
-                                child: Row(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                ),
+                                child: const Row(
                                   children: [
                                     Icon(Icons.edit_rounded,
                                         color: Colors.white, size: 20),
                                   ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                 ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                             customPadding, 5, customPadding, 5),
                         child: Row(
                           children: [
-                            Text(
+                            const Text(
                               'รูปภาพUrl',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -530,7 +535,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: Color(0xFF000000),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: TextField(
                                 controller: imageCtl,
@@ -561,31 +566,32 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             SizedBox(
                               width: 50,
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: saveEdit,
-                                child: Row(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF92A47),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                ),
+                                child: const Row(
                                   children: [
                                     Icon(Icons.edit_rounded,
                                         color: Colors.white, size: 20),
                                   ],
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
                                 ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                     ],
@@ -610,7 +616,6 @@ class _ProfilePageState extends State<ProfilePage> {
         .get(Uri.parse('$API_ENDPOINT/customers/detail/${widget.uid}'));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      print('ข้อมูล :${data}');
       return UsersLoginPostResponse.fromJson(data);
     } else {
       throw Exception('Failed to load user data');
@@ -618,7 +623,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> saveEdit() async {
-    // Validate input fields
     if (usernameCtl.text.trim().isEmpty ||
         fullnameCtl.text.trim().isEmpty ||
         emailCtl.text.trim().isEmpty ||
@@ -627,7 +631,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('กรุณากรอกข้อมูลให้ครบถ้วน')),
       );
-      return; // Exit the function if validation fails
+      return;
     }
 
     var config = await Configuration.getConfig();
@@ -638,8 +642,7 @@ class _ProfilePageState extends State<ProfilePage> {
       'email': emailCtl.text.trim(),
       'phone': phoneCtl.text.trim(),
       'password': passwordCtl.text.trim(),
-      'image':
-          imageCtl.text.trim(), // 'image' can be null or empty, as it's allowed
+      'image': imageCtl.text.trim(),
     });
 
     showModalBottomSheet(
@@ -658,14 +661,14 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Container(
               height: 280,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(35),
                   topRight: Radius.circular(35),
                 ),
               ),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -677,8 +680,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     'ยืนยันอัพเดตข้อมูลผู้ใช้',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -687,8 +690,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'คุณต้องการอัพเดตข้อมูลใช่ไหม?',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -697,7 +700,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -705,7 +708,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(
+                        child: const Text(
                           'ยกเลิก',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',
@@ -728,7 +731,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             log('อัพเดตข้อมูลเรียบร้อย');
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text('อัพเดตข้อมูลเรียบร้อย')),
+                                  content: Text(
+                                'อัพเดตข้อมูลเรียบร้อย',
+                                style: TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFFFFFFFF),
+                                ),
+                              )),
                             );
                             setState(() {
                               loadDataUser = fetchUserData();
@@ -743,7 +754,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'อัพเดตข้อมูลผู้ใช้',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',
@@ -781,14 +792,14 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             Container(
               height: 280,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(35),
                   topRight: Radius.circular(35),
                 ),
               ),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -800,8 +811,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
-                  SizedBox(height: 30),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     'ยืนยันลบบัญชีผู้ใช้',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -810,8 +821,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'คุณต้องการลบบัญชีผู้ใช้ใช่ไหม?',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -820,7 +831,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -828,7 +839,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(
+                        child: const Text(
                           'ยกเลิก',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',
@@ -848,17 +859,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           if (response.statusCode == 200) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (context) => IntroPage(),
+                                builder: (context) => const IntroPage(),
                               ),
                             );
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                   content: Text('Failed to delete account')),
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'ลบบัญชีผู้ใช้',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',
@@ -897,7 +908,7 @@ class HalfCirclePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..shader = LinearGradient(
+      ..shader = const LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
         colors: [

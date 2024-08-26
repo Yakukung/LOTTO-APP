@@ -43,7 +43,8 @@ class _WalletPageState extends State<WalletPage> {
         future: loadDataUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Drawer(child: Center(child: CircularProgressIndicator()));
+            return const Drawer(
+                child: Center(child: CircularProgressIndicator()));
           }
           if (snapshot.hasError) {
             return Drawer(
@@ -58,7 +59,8 @@ class _WalletPageState extends State<WalletPage> {
               currentPage: 'wallet',
             );
           } else {
-            return Drawer(child: Center(child: Text('No data available')));
+            return const Drawer(
+                child: Center(child: Text('No data available')));
           }
         },
       ),
@@ -67,13 +69,13 @@ class _WalletPageState extends State<WalletPage> {
           future: loadDataUser,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
             if (!snapshot.hasData) {
-              return Center(child: Text('No data available'));
+              return const Center(child: Text('No data available'));
             }
 
             final user = snapshot.data!;
@@ -100,14 +102,14 @@ class _WalletPageState extends State<WalletPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(width: 8),
-                        Text('${user.wallet.toStringAsFixed(2)}',
-                            style: TextStyle(
+                        const SizedBox(width: 8),
+                        Text(user.wallet.toStringAsFixed(2),
+                            style: const TextStyle(
                                 fontFamily: 'SukhumvitSet',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 52,
                                 color: Color(0xFFFFFFFF))),
-                        Text('ยอดวอเล็ตคงเหลือ',
+                        const Text('ยอดวอเล็ตคงเหลือ',
                             style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
                                 fontWeight: FontWeight.bold,
@@ -131,7 +133,8 @@ class _WalletPageState extends State<WalletPage> {
                               child: Column(
                                 children: [
                                   ShaderMask(
-                                    shaderCallback: (bounds) => LinearGradient(
+                                    shaderCallback: (bounds) =>
+                                        const LinearGradient(
                                       colors: [
                                         Color(0xFFEAAC8B),
                                         Color(0xFFE88C7D),
@@ -143,14 +146,14 @@ class _WalletPageState extends State<WalletPage> {
                                       begin: Alignment.topLeft,
                                       end: Alignment.bottomRight,
                                     ).createShader(bounds),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.account_balance_wallet_outlined,
                                       size: 45,
                                       color: Colors.white,
                                     ),
                                   ),
-                                  SizedBox(height: 5),
-                                  Text('เติมเงิน',
+                                  const SizedBox(height: 5),
+                                  const Text('เติมเงิน',
                                       style: TextStyle(
                                           fontFamily: 'SukhumvitSet',
                                           fontWeight: FontWeight.bold,
@@ -164,7 +167,8 @@ class _WalletPageState extends State<WalletPage> {
                             child: Column(
                               children: [
                                 ShaderMask(
-                                  shaderCallback: (bounds) => LinearGradient(
+                                  shaderCallback: (bounds) =>
+                                      const LinearGradient(
                                     colors: [
                                       Color(0xFFEAAC8B),
                                       Color(0xFFE88C7D),
@@ -176,14 +180,14 @@ class _WalletPageState extends State<WalletPage> {
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
                                   ).createShader(bounds),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.currency_exchange_outlined,
                                     size: 45,
                                     color: Colors.white,
                                   ),
                                 ),
-                                SizedBox(height: 5),
-                                Text('โอนเงิน',
+                                const SizedBox(height: 5),
+                                const Text('โอนเงิน',
                                     style: TextStyle(
                                         fontFamily: 'SukhumvitSet',
                                         fontWeight: FontWeight.bold,
@@ -194,7 +198,7 @@ class _WalletPageState extends State<WalletPage> {
                           )
                         ],
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       Container(
                         height: 3,
                         decoration: BoxDecoration(
@@ -204,8 +208,8 @@ class _WalletPageState extends State<WalletPage> {
                       ),
                       Column(
                         children: [
-                          SizedBox(height: 10),
-                          Row(
+                          const SizedBox(height: 10),
+                          const Row(
                             children: [
                               Text('รายการย้อนหลัง',
                                   style: TextStyle(
@@ -216,8 +220,8 @@ class _WalletPageState extends State<WalletPage> {
                             ],
                           ),
                           Container(
-                            color: Color(0xFFF5F5F7),
-                            child: Column(
+                            color: const Color(0xFFF5F5F7),
+                            child: const Column(
                               children: [
                                 Row(
                                   children: [],
@@ -243,8 +247,7 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Future<UsersLoginPostResponse> fetchUserData(int uid) async {
-    final response =
-        await http.get(Uri.parse('${API_ENDPOINT}/customers/$uid'));
+    final response = await http.get(Uri.parse('$API_ENDPOINT/customers/$uid'));
     if (response.statusCode == 200) {
       return UsersLoginPostResponse.fromJson(jsonDecode(response.body));
     } else {

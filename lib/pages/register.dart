@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
     double customPadding = isPortrait ? 35.0 : 70.0;
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -49,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ShaderMask(
-              shaderCallback: (bounds) => LinearGradient(
+              shaderCallback: (bounds) => const LinearGradient(
                 colors: [
                   Color(0xFFEAAC8B),
                   Color(0xFFE88C7D),
@@ -61,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomLeft,
               ).createShader(bounds),
-              child: Text(
+              child: const Text(
                 'LOTTO',
                 style: TextStyle(
                   fontFamily: 'SukhumvitSet',
@@ -74,19 +75,19 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
           child: Padding(
             padding: EdgeInsets.only(
-                top: 50, left: customPadding, right: customPadding, bottom: 50),
+                top: 50, left: customPadding, right: customPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 70),
-                Text(
+                const SizedBox(height: 70),
+                const Text(
                   'ลงทะเบียน',
                   style: TextStyle(
                     fontSize: 43,
@@ -94,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontFamily: 'SukhumvitSet',
                   ),
                 ),
-                Text(
+                const Text(
                   'สร้างบัญชีใหม่ของคุณ',
                   style: TextStyle(
                     fontSize: 16,
@@ -103,12 +104,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontFamily: 'SukhumvitSet',
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   controller: usernameCtl,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F7),
+                    fillColor: const Color(0xFFF5F5F7),
                     hintText: 'ชื่อผู้ใช้',
                     hintStyle: const TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -116,7 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontSize: 16,
                       color: Color(0xFF7B7B7C),
                     ),
-                    prefixIcon: Icon(Icons.person, color: Colors.black),
+                    prefixIcon: const Icon(Icons.person, color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
@@ -129,12 +130,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Color(0xFF000000),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: fullnameCtl,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F7),
+                    fillColor: const Color(0xFFF5F5F7),
                     hintText: 'ชื่อ-สกุล',
                     hintStyle: const TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -142,7 +143,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontSize: 16,
                       color: Color(0xFF7B7B7C),
                     ),
-                    prefixIcon: Icon(Icons.person, color: Colors.black),
+                    prefixIcon: const Icon(Icons.person, color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
@@ -155,12 +156,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Color(0xFF000000),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: emailCtl,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F7),
+                    fillColor: const Color(0xFFF5F5F7),
                     hintText: 'อีเมล',
                     hintStyle: const TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -168,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontSize: 16,
                       color: Color(0xFF7B7B7C),
                     ),
-                    prefixIcon: Icon(Icons.email, color: Colors.black),
+                    prefixIcon: const Icon(Icons.email, color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
@@ -181,12 +182,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Color(0xFF000000),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: phoneCtl,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F7),
+                    fillColor: const Color(0xFFF5F5F7),
                     hintText: 'โทรศัพท์',
                     hintStyle: const TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -194,7 +195,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontSize: 16,
                       color: Color(0xFF7B7B7C),
                     ),
-                    prefixIcon: Icon(Icons.phone_iphone, color: Colors.black),
+                    prefixIcon:
+                        const Icon(Icons.phone_iphone, color: Colors.black),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
@@ -207,13 +209,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Color(0xFF000000),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextField(
                   controller: passwordCtl,
                   obscureText: _obscureText,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF5F5F7),
+                    fillColor: const Color(0xFFF5F5F7),
                     hintText: 'รหัสผ่าน',
                     hintStyle: const TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -221,7 +223,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       fontSize: 16,
                       color: Color(0xFF7B7B7C),
                     ),
-                    prefixIcon: Icon(Icons.lock, color: Colors.black),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscureText ? Icons.visibility_off : Icons.visibility,
@@ -240,22 +242,22 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Color(0xFF000000),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Color(0xFFF5F5F7),
+                    color: const Color(0xFFF5F5F7),
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.wallet, color: Colors.black),
-                      SizedBox(width: 8),
+                      const Icon(Icons.wallet, color: Colors.black),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: _selectedWalletAmount,
-                            hint: Text(
+                            hint: const Text(
                               'เลือกจำนวน Wallet',
                               style: TextStyle(
                                 fontFamily: 'SukhumvitSet',
@@ -269,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -283,7 +285,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 _selectedWalletAmount = newValue;
                               });
                             },
-                            dropdownColor: Color(0xFFF5F5F7),
+                            dropdownColor: const Color(0xFFF5F5F7),
                             isExpanded: true,
                           ),
                         ),
@@ -291,10 +293,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: register,
-                  child: Text(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF92A47),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  child: const Text(
                     'ยืนยันการลงทะเบียน',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
@@ -303,15 +312,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Color(0xFFFFFFFF),
                     ),
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFF92A47),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    minimumSize: Size(double.infinity, 50),
-                  ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 Row(
                   children: [
                     Expanded(
@@ -321,10 +323,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        margin: EdgeInsets.only(right: 8),
+                        margin: const EdgeInsets.only(right: 8),
                       ),
                     ),
-                    Text(
+                    const Text(
                       'หรือ ดำเนินต่อด้วยวิธีอื่น',
                       style: TextStyle(
                         fontFamily: 'SukhumvitSet',
@@ -339,12 +341,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        margin: EdgeInsets.only(left: 8),
+                        margin: const EdgeInsets.only(left: 8),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -360,7 +362,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     CircleAvatar(
                       backgroundColor: Colors.transparent,
                       radius: 24,
@@ -373,12 +375,12 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     CircleAvatar(
                       backgroundColor: Colors.transparent,
                       radius: 24,
                       child: Transform.translate(
-                        offset: Offset(0, -3),
+                        offset: const Offset(0, -3),
                         child: ClipOval(
                           child: Image.asset(
                             'assets/logo/icons8-apple.png',
@@ -390,6 +392,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             ),
@@ -512,11 +517,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     AnimatedCheckmark(isSuccess: true),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
-                      child: Text(
+                      child: const Text(
                         'ลงทะเบียนสำเร็จ',
                         style: TextStyle(
                           fontFamily: 'SukhumvitSet',
@@ -526,22 +531,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       'ชื่อผู้ใช้ : ${usernameCtl.text}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'SukhumvitSet',
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                         color: Color(0xFF000000),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Column(
                       children: [
                         Container(
                           height: 1,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xffB3B3B3),
                           ),
                         ),
@@ -551,7 +556,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextButton(
-                                child: Text(
+                                child: const Text(
                                   'ตกลง',
                                   style: TextStyle(
                                     fontFamily: 'SukhumvitSet',
@@ -606,11 +611,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     AnimatedCheckmark(isSuccess: false),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Container(
-                      child: Text(
+                      child: const Text(
                         'ลงทะเบียนไม่สำเร็จ',
                         style: TextStyle(
                           fontFamily: 'SukhumvitSet',
@@ -620,22 +625,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Text(
                       message,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'SukhumvitSet',
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
                         color: Color(0xFF000000),
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Column(
                       children: [
                         Container(
                           height: 1,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color(0xffB3B3B3),
                           ),
                         ),
@@ -645,7 +650,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextButton(
-                                child: Text(
+                                child: const Text(
                                   'ตกลง',
                                   style: TextStyle(
                                     fontFamily: 'SukhumvitSet',
