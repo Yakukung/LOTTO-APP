@@ -84,6 +84,8 @@ flutter:
     - assets/logo/icons8-facebook.png
     - assets/icon/cancel.png
     - assets/logo/
+    - assets/image/1.png
+    - assets/image/2.png
 
     - assets/config/config.json
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/config/internal_config.dart';
@@ -12,6 +11,7 @@ import 'package:lotto_app/nav/navbar.dart';
 
 class CheckLotto extends StatefulWidget {
   final int uid;
+
   const CheckLotto({super.key, required this.uid});
 
   @override
@@ -22,14 +22,55 @@ class _CheckLottoState extends State<CheckLotto> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late Future<UsersLoginPostResponse> loadDataUser;
   late Future<List<LottoGetResponse>> loadDataLottoPrize;
+  List<LottoGetResponse> allLottoData = [];
+  List<LottoGetResponse> filteredLottoData = [];
 
   TextEditingController searchCtl = TextEditingController();
+  String searchResult = '';
+  String lid = '';
+  String wallet_prize = '';
+  String total_lotto_prize = '';
 
   @override
   void initState() {
     super.initState();
     loadDataUser = fetchUserData(widget.uid);
-    loadDataLottoPrize = loadDataLottoPrizeAsync();
+    loadDataLottoPrize = loadDataLottoPrizeAsync().then((data) {
+      setState(() {
+        allLottoData = data;
+        filteredLottoData = data;
+      });
+      return data;
+    });
+  }
+
+  void checkLottoNumber(String number) {
+    if (number.isEmpty) {
+      setState(() {
+        searchResult = '';
+        lid = '';
+      });
+      return;
+    }
+
+    final List<LottoGetResponse> matchingLotto = allLottoData
+        .where(
+          (lotto) => lotto.number.toString() == number,
+        )
+        .toList();
+
+    if (matchingLotto.isNotEmpty) {
+      final winningLotto = matchingLotto.first;
+      setState(() {
+        searchResult = 'ยินดีด้วย! คุณถูกรางวัลที่ ${winningLotto.prize}';
+        lid = '${winningLotto.lid}';
+        wallet_prize = '${winningLotto.wallet_prize}';
+      });
+    } else {
+      setState(() {
+        searchResult = 'เสียใจด้วย คุณไม่ถูกรางวัล กินแกลบต่อไป!!!';
+      });
+    }
   }
 
   @override
@@ -112,12 +153,47 @@ class _CheckLottoState extends State<CheckLotto> {
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
-                      onChanged: (value) {
-                        if (kDebugMode) {
-                          print('Search query: $value');
-                        }
+                      onSubmitted: (value) {
+                        checkLottoNumber(value);
                       },
                     ),
+                    if (searchResult.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              searchResult.contains('ยินดีด้วย')
+                                  ? 'assets/image/1.png'
+                                  : 'assets/image/2.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                            Text(
+                              searchCtl.text,
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28,
+                                color: searchResult.contains('ยินดีด้วย')
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                            ),
+                            Text(
+                              searchResult,
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: searchResult.contains('ยินดีด้วย')
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     const SizedBox(height: 20),
                     Container(
                       height: 3,
@@ -178,7 +254,7 @@ class _CheckLottoState extends State<CheckLotto> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                        date, // Use formatted date for the text
+                                        date,
                                         style: const TextStyle(
                                           fontFamily: 'SukhumvitSet',
                                           fontWeight: FontWeight.bold,
@@ -242,7 +318,7 @@ class _CheckLottoState extends State<CheckLotto> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              '${item.number}', // Use formatted date for the text
+                                              '${item.number}',
                                               style: const TextStyle(
                                                 fontFamily: 'SukhumvitSet',
                                                 fontWeight: FontWeight.bold,
