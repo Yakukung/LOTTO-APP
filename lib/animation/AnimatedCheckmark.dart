@@ -63,13 +63,9 @@ class _AnimatedCheckmarkState extends State<AnimatedCheckmark>
       animation: _animation,
       builder: (context, child) {
         return Transform.translate(
-          offset: widget.isSuccess
-              ? Offset.zero // สำหรับการแอนิเมชันแบบ ease-in-out
-              : Offset(_animation.value, 0), // การเคลื่อนไหวไปซ้ายและขวา
+          offset: widget.isSuccess ? Offset.zero : Offset(_animation.value, 0),
           child: Icon(
-            widget.isSuccess
-                ? Icons.check_circle
-                : Icons.cancel, // เปลี่ยนเป็น Icons.cancel สำหรับ error
+            widget.isSuccess ? Icons.check_circle : Icons.cancel,
             color: widget.isSuccess ? Colors.green : Colors.red,
             size: 60,
           ),

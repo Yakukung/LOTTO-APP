@@ -8,6 +8,7 @@ String lottoGetResponseToJson(LottoGetResponse data) =>
     json.encode(data.toJson());
 
 class LottoGetResponse {
+  int lid;
   int prize;
   int wallet_prize;
   int number;
@@ -18,6 +19,7 @@ class LottoGetResponse {
   late String formattedDate;
 
   LottoGetResponse({
+    required this.lid,
     required this.prize,
     required this.wallet_prize,
     required this.number,
@@ -32,6 +34,7 @@ class LottoGetResponse {
 
   factory LottoGetResponse.fromJson(Map<String, dynamic> json) {
     return LottoGetResponse(
+      lid: json["lid"] ?? 0,
       prize: json["prize"] ?? 0,
       wallet_prize: json["wallet_prize"] ?? 0,
       number: json["number"] ?? 0,
@@ -43,6 +46,7 @@ class LottoGetResponse {
   }
 
   Map<String, dynamic> toJson() => {
+        "lid": lid,
         "prize": prize,
         "wallet_prize": wallet_prize,
         "number": number,

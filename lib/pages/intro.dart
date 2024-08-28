@@ -117,7 +117,7 @@ class _IntroPageState extends State<IntroPage> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return LoginPage();
+        return const LoginPage();
       },
     );
   }

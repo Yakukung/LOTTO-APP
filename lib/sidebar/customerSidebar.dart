@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/pages/customers/basket.dart';
 import 'package:lotto_app/pages/customers/check_lotto.dart';
-import 'package:lotto_app/pages/customers/home.dart';
+import 'package:lotto_app/pages/customers/home/home.dart';
 import 'package:lotto_app/pages/customers/my_lotto.dart';
 import 'package:lotto_app/pages/customers/profile.dart';
 import 'package:lotto_app/pages/customers/wallet.dart';

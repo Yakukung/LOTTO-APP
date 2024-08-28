@@ -9,6 +9,7 @@ import 'package:lotto_app/model/Response/LottoGetResponse.dart';
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
 import 'package:lotto_app/nav/navbar.dart';
 import 'package:lotto_app/nav/navbottom.dart';
+import 'package:lotto_app/pages/customers/home/add_basket.dart';
 import 'package:lotto_app/sidebar/CustomerSidebar.dart';
 import 'package:lotto_app/model/Response/LottoTypeGetResponse.dart';
 
@@ -485,9 +486,10 @@ class _HomePageState extends State<HomePage> {
                                             SizedBox(
                                               width: 70,
                                               height: 27,
-                                              child: ElevatedButton(
-                                                onPressed: () {},
-                                                style: ElevatedButton.styleFrom(
+                                              child: FilledButton(
+                                                onPressed: () => addBasket(
+                                                    user.uid, lotto.lid),
+                                                style: FilledButton.styleFrom(
                                                   backgroundColor:
                                                       const Color(0xFFF92A47),
                                                   shape: RoundedRectangleBorder(
@@ -606,5 +608,17 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       selectedType = type;
     });
+  }
+
+  void addBasket(int uid, int lid) {
+    log('Uid: $uid เพิ่มสินค้า $lid');
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return AddBasketPage(uid: uid, lid: lid);
+      },
+    );
   }
 }

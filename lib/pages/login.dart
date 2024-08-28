@@ -8,7 +8,7 @@ import 'package:lotto_app/config/internal_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
 import 'package:lotto_app/pages/admin/adminHome.dart';
-import 'package:lotto_app/pages/customers/home.dart';
+import 'package:lotto_app/pages/customers/home/home.dart';
 import 'package:lotto_app/model/Request/UsersLoginPostRequest.dart';
 
 class LoginPage extends StatefulWidget {
