@@ -79,276 +79,282 @@ class _CheckLottoState extends State<CheckLotto> {
         MediaQuery.of(context).orientation == Orientation.portrait;
     double customPadding = isPortrait ? 20.0 : 60.0;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      appBar: Navbar(
-        loadDataUser: loadDataUser,
-        scaffoldKey: _scaffoldKey,
-      ),
-      drawer: FutureBuilder<UsersLoginPostResponse>(
-        future: loadDataUser,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.white,
+        appBar: Navbar(
+          loadDataUser: loadDataUser,
+          scaffoldKey: _scaffoldKey,
+        ),
+        drawer: FutureBuilder<UsersLoginPostResponse>(
+          future: loadDataUser,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Drawer(
+                  child: Center(child: CircularProgressIndicator()));
+            }
+            if (snapshot.hasError) {
+              return Drawer(
+                  child: Center(child: Text('Error: ${snapshot.error}')));
+            }
+            if (snapshot.hasData) {
+              final user = snapshot.data!;
+              return CustomerSidebar(
+                imageUrl: user.image ?? '',
+                fullname: user.fullname,
+                uid: user.uid,
+                currentPage: 'check_lotto',
+              );
+            }
             return const Drawer(
-                child: Center(child: CircularProgressIndicator()));
-          }
-          if (snapshot.hasError) {
-            return Drawer(
-                child: Center(child: Text('Error: ${snapshot.error}')));
-          }
-          if (snapshot.hasData) {
-            final user = snapshot.data!;
-            return CustomerSidebar(
-              imageUrl: user.image ?? '',
-              fullname: user.fullname,
-              uid: user.uid,
-              currentPage: 'check_lotto',
-            );
-          }
-          return const Drawer(child: Center(child: Text('No data available')));
-        },
-      ),
-      body: FutureBuilder<List<LottoGetResponse>>(
-        future: loadDataLottoPrize,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (snapshot.hasData) {
-            final lottoData = snapshot.data!;
-            final groupedData = groupLottoByDate(lottoData);
+                child: Center(child: Text('No data available')));
+          },
+        ),
+        body: FutureBuilder<List<LottoGetResponse>>(
+          future: loadDataLottoPrize,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            if (snapshot.hasData) {
+              final lottoData = snapshot.data!;
+              final groupedData = groupLottoByDate(lottoData);
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: customPadding,
-                    right: customPadding,
-                    top: 20,
-                    bottom: 20),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: searchCtl,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFFF5F5F7),
-                        hintText: 'ตรวจสอบฉลาก',
-                        hintStyle: const TextStyle(
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: customPadding,
+                      right: customPadding,
+                      top: 20,
+                      bottom: 20),
+                  child: Column(
+                    children: [
+                      TextField(
+                        controller: searchCtl,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: const Color(0xFFF5F5F7),
+                          hintText: 'ตรวจสอบฉลาก',
+                          hintStyle: const TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          prefixIcon: const Icon(Icons.search_rounded),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(
                           fontFamily: 'SukhumvitSet',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide.none,
-                        ),
+                        onSubmitted: (value) {
+                          checkLottoNumber(value);
+                        },
                       ),
-                      style: const TextStyle(
-                        fontFamily: 'SukhumvitSet',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                      onSubmitted: (value) {
-                        checkLottoNumber(value);
-                      },
-                    ),
-                    if (searchResult.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              searchResult.contains('ยินดีด้วย')
-                                  ? 'assets/image/1.png'
-                                  : 'assets/image/2.png',
-                              width: 100,
-                              height: 100,
-                            ),
-                            Text(
-                              searchCtl.text,
-                              style: TextStyle(
-                                fontFamily: 'SukhumvitSet',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 28,
-                                color: searchResult.contains('ยินดีด้วย')
-                                    ? Colors.green
-                                    : Colors.red,
+                      if (searchResult.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                searchResult.contains('ยินดีด้วย')
+                                    ? 'assets/image/1.png'
+                                    : 'assets/image/2.png',
+                                width: 100,
+                                height: 100,
                               ),
-                            ),
-                            Text(
-                              searchResult,
-                              style: TextStyle(
-                                fontFamily: 'SukhumvitSet',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: searchResult.contains('ยินดีด้วย')
-                                    ? Colors.green
-                                    : Colors.red,
+                              Text(
+                                searchCtl.text,
+                                style: TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 28,
+                                  color: searchResult.contains('ยินดีด้วย')
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    const SizedBox(height: 20),
-                    Container(
-                      height: 3,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F7),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Row(
-                      children: [
-                        Text(
-                          'ตรวจฉลาก LOTTO ย้อนหลัง',
-                          style: TextStyle(
-                            fontFamily: 'SukhumvitSet',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Color(0xFF000000),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    ...groupedData.entries.map((entry) {
-                      final date = formatDate(entry.key);
-                      final items = entry.value;
-                      return Container(
-                        width: 350,
-                        height: 360,
-                        margin: const EdgeInsets.only(bottom: 20),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFEAAC8B),
-                              Color(0xFFE88C7D),
-                              Color(0xFFEE5566),
-                              Color(0xFFB56576),
-                              Color(0xFF6D597A),
+                              Text(
+                                searchResult,
+                                style: TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: searchResult.contains('ยินดีด้วย')
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
                             ],
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
                           ),
-                          borderRadius: BorderRadius.circular(30),
                         ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: 120,
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        date,
-                                        style: const TextStyle(
-                                          fontFamily: 'SukhumvitSet',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30,
-                                          color: Color(0xFF000000),
+                      const SizedBox(height: 20),
+                      Container(
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F5F7),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Row(
+                        children: [
+                          Text(
+                            'ตรวจฉลาก LOTTO ย้อนหลัง',
+                            style: TextStyle(
+                              fontFamily: 'SukhumvitSet',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      ...groupedData.entries.map((entry) {
+                        final date = formatDate(entry.key);
+                        final items = entry.value;
+                        return Container(
+                          width: 350,
+                          height: 360,
+                          margin: const EdgeInsets.only(bottom: 20),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFEAAC8B),
+                                Color(0xFFE88C7D),
+                                Color(0xFFEE5566),
+                                Color(0xFFB56576),
+                                Color(0xFF6D597A),
+                              ],
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 120,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          date,
+                                          style: const TextStyle(
+                                            fontFamily: 'SukhumvitSet',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 30,
+                                            color: Color(0xFF000000),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: items.map((item) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 6, bottom: 6),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'รางวัลที่ ${item.prize}',
-                                              style: const TextStyle(
-                                                fontFamily: 'SukhumvitSet',
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Color(0xFFFFFFFF),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.wallet_rounded,
-                                                  color: Colors.white,
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: items.map((item) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 6, bottom: 6),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'รางวัลที่ ${item.prize}',
+                                                style: const TextStyle(
+                                                  fontFamily: 'SukhumvitSet',
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  color: Color(0xFFFFFFFF),
                                                 ),
-                                                Text(
-                                                  '${item.wallet_prize}',
-                                                  style: const TextStyle(
-                                                    fontFamily: 'SukhumvitSet',
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 14,
-                                                    color: Color(0xFFFFFFFF),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.wallet_rounded,
+                                                    color: Colors.white,
                                                   ),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        Container(
-                                          width: 170,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                                  Text(
+                                                    '${item.wallet_prize}',
+                                                    style: const TextStyle(
+                                                      fontFamily:
+                                                          'SukhumvitSet',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14,
+                                                      color: Color(0xFFFFFFFF),
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              '${item.number}',
-                                              style: const TextStyle(
-                                                fontFamily: 'SukhumvitSet',
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                                color: Color(0xFF000000),
+                                          Container(
+                                            width: 170,
+                                            height: 30,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${item.number}',
+                                                style: const TextStyle(
+                                                  fontFamily: 'SukhumvitSet',
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  color: Color(0xFF000000),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                }).toList(),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-          return const Center(child: Text('No lotto data available'));
-        },
-      ),
-      bottomNavigationBar: NavBottom(
-        uid: widget.uid,
-        selectedIndex: 1,
+              );
+            }
+            return const Center(child: Text('No lotto data available'));
+          },
+        ),
+        bottomNavigationBar: NavBottom(
+          uid: widget.uid,
+          selectedIndex: 1,
+        ),
       ),
     );
   }

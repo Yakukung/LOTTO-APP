@@ -28,41 +28,44 @@ class _MyLottoPageState extends State<MyLottoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      appBar: Navbar(
-        loadDataUser: loadDataUser,
-        scaffoldKey: _scaffoldKey,
-      ),
-      drawer: FutureBuilder<UsersLoginPostResponse>(
-        future: loadDataUser,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Drawer(
-                child: Center(child: CircularProgressIndicator()));
-          }
-          if (snapshot.hasError) {
-            return Drawer(
-                child: Center(child: Text('Error: ${snapshot.error}')));
-          }
-          if (snapshot.hasData) {
-            final user = snapshot.data!;
-            return CustomerSidebar(
-              imageUrl: user.image ?? '',
-              fullname: user.fullname,
-              uid: user.uid,
-              currentPage: 'my_lotto',
-            );
-          } else {
-            return const Drawer(
-                child: Center(child: Text('No data available')));
-          }
-        },
-      ),
-      bottomNavigationBar: NavBottom(
-        uid: widget.uid,
-        selectedIndex: 0,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.white,
+        appBar: Navbar(
+          loadDataUser: loadDataUser,
+          scaffoldKey: _scaffoldKey,
+        ),
+        drawer: FutureBuilder<UsersLoginPostResponse>(
+          future: loadDataUser,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Drawer(
+                  child: Center(child: CircularProgressIndicator()));
+            }
+            if (snapshot.hasError) {
+              return Drawer(
+                  child: Center(child: Text('Error: ${snapshot.error}')));
+            }
+            if (snapshot.hasData) {
+              final user = snapshot.data!;
+              return CustomerSidebar(
+                imageUrl: user.image ?? '',
+                fullname: user.fullname,
+                uid: user.uid,
+                currentPage: 'my_lotto',
+              );
+            } else {
+              return const Drawer(
+                  child: Center(child: Text('No data available')));
+            }
+          },
+        ),
+        bottomNavigationBar: NavBottom(
+          uid: widget.uid,
+          selectedIndex: 0,
+        ),
       ),
     );
   }

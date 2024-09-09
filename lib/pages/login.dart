@@ -11,6 +11,9 @@ import 'package:lotto_app/pages/admin/adminHome.dart';
 import 'package:lotto_app/pages/customers/home/home.dart';
 import 'package:lotto_app/model/Request/UsersLoginPostRequest.dart';
 
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -300,26 +303,26 @@ class _LoginPageState extends State<LoginPage> {
 
         // log("Email: ${users.email}");
         // log("UserName: ${users.username}");
-        log("uid : ${users.uid}");
-        log("type : ${users.type}");
+        // log("uid : ${users.uid}");
+        // log("type : ${users.type}");
 
         int userType = users.type;
         int uid = users.uid;
 
         if (userType == 0) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AdminhomePage(uid: uid),
-            ),
-          );
+          GetStorage gs = GetStorage();
+          gs.write('uid', uid);
+          gs.write('type', userType);
+          log("UID written: $uid");
+
+          Get.to(() => AdminhomePage(uid: uid));
         } else if (userType == 1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(uid: uid),
-            ),
-          );
+          GetStorage gs = GetStorage();
+          gs.write('uid', uid);
+          gs.write('type', userType);
+          log("UID written: $uid");
+
+          Get.to(() => HomePage(uid: uid));
         } else {
           _showErrorDialog('ไม่สามารถกำหนดประเภทผู้ใช้ได้');
         }

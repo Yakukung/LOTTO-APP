@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lotto_app/pages/admin/adminHome.dart';
 import 'package:lotto_app/pages/admin/manageUser.dart';
 import 'package:lotto_app/pages/intro.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class CustomerSidebar extends StatelessWidget {
   final String imageUrl;
@@ -23,7 +25,6 @@ class CustomerSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    log(isPortrait ? 'Portrait' : 'Landscape');
     double customPadding = isPortrait ? 20.0 : 60.0;
 
     return FractionallySizedBox(
@@ -300,13 +301,16 @@ class CustomerSidebar extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const IntroPage(),
-                            ),
-                          );
+                          // Navigator.of(context).pop();
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => const IntroPage(),
+                          //   ),
+                          // );
+                          GetStorage gs = GetStorage();
+                          gs.erase();
+                          Get.offAll(() => IntroPage());
                         },
                         child: Text(
                           'ออกจากระบบ',

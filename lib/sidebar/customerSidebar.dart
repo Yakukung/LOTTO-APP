@@ -1,6 +1,7 @@
-import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lotto_app/pages/customers/basket.dart';
 import 'package:lotto_app/pages/customers/check_lotto.dart';
 import 'package:lotto_app/pages/customers/home/home.dart';
@@ -27,7 +28,6 @@ class CustomerSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    log(isPortrait ? 'Portrait' : 'Landscape');
     double customPadding = isPortrait ? 20.0 : 60.0;
 
     return FractionallySizedBox(
@@ -114,12 +114,7 @@ class CustomerSidebar extends StatelessWidget {
                   text: 'หน้าหลัก',
                   page: 'home',
                   onTap: () {
-                    log('Navigating to Home with UID: $uid');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(uid: uid)),
-                    );
+                    Get.to(() => HomePage(uid: uid));
                   },
                 ),
                 _buildMenuItem(
@@ -129,14 +124,7 @@ class CustomerSidebar extends StatelessWidget {
                   text: 'ข้อมูลส่วนตัว',
                   page: 'profile',
                   onTap: () {
-                    log('Navigating to Profile with UID: $uid');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(
-                                uid: uid,
-                              )),
-                    );
+                    Get.to(() => ProfilePage(uid: uid));
                   },
                 ),
                 _buildMenuItem(
@@ -146,12 +134,7 @@ class CustomerSidebar extends StatelessWidget {
                   text: 'ตรวจฉลาก',
                   page: 'check_lotto', // เพิ่มค่า page
                   onTap: () {
-                    log('Navigating to Check LOTTO with UID: $uid');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CheckLotto(uid: uid)),
-                    );
+                    Get.to(() => CheckLotto(uid: uid));
                   },
                 ),
                 _buildMenuItem(
@@ -161,12 +144,7 @@ class CustomerSidebar extends StatelessWidget {
                   text: 'LOTTO ของฉัน',
                   page: 'my_lotto', // เพิ่มค่า page
                   onTap: () {
-                    log('Navigating to MY LOTTO with UID: $uid');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyLottoPage(uid: uid)),
-                    );
+                    Get.to(() => MyLottoPage(uid: uid));
                   },
                 ),
                 _buildMenuItem(
@@ -176,12 +154,7 @@ class CustomerSidebar extends StatelessWidget {
                   text: 'ตะกร้า',
                   page: 'basket', // เพิ่มค่า page
                   onTap: () {
-                    log('Navigating to Basket with UID: $uid');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BasketPage(uid: uid)),
-                    );
+                    Get.to(() => BasketPage(uid: uid));
                   },
                 ),
                 _buildMenuItem(
@@ -191,12 +164,7 @@ class CustomerSidebar extends StatelessWidget {
                   text: 'Wallet',
                   page: 'wallet', // เพิ่มค่า page
                   onTap: () {
-                    log('Navigating to Wallet with UID: $uid');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WalletPage(uid: uid)),
-                    );
+                    Get.to(() => WalletPage(uid: uid));
                   },
                 ),
                 const Divider(),
@@ -356,13 +324,9 @@ class CustomerSidebar extends StatelessWidget {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const IntroPage(),
-                            ),
-                          );
+                          GetStorage gs = GetStorage();
+                          gs.erase();
+                          Get.offAll(() => IntroPage());
                         },
                         child: const Text(
                           'ออกจากระบบ',

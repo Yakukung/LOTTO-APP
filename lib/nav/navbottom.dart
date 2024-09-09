@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lotto_app/pages/customers/basket.dart';
 import 'package:lotto_app/pages/customers/check_lotto.dart';
 import 'package:lotto_app/pages/customers/home/home.dart';
@@ -30,36 +31,18 @@ class _NavBottomState extends State<NavBottom> {
         _selectedIndex = index;
       });
 
-      // Replace current route with the new route
       switch (index) {
         case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomePage(uid: widget.uid),
-            ),
-          );
+          Get.to(() => HomePage(uid: widget.uid));
           break;
         case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CheckLotto(uid: widget.uid)),
-          );
+          Get.to(() => CheckLotto(uid: widget.uid));
           break;
         case 2:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => BasketPage(uid: widget.uid)),
-          );
+          Get.to(() => BasketPage(uid: widget.uid));
           break;
         case 3:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WalletPage(uid: widget.uid)),
-          );
+          Get.to(() => WalletPage(uid: widget.uid));
           break;
       }
     }

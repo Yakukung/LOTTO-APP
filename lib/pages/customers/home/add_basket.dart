@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lotto_app/config/internal_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/model/Response/LottoGetResponse.dart';
+import 'package:get/get.dart';
 
 class AddBasketPage extends StatefulWidget {
   final int uid;
@@ -288,7 +289,7 @@ class _AddBasketPageState extends State<AddBasketPage> {
 
   Future<void> addBasket() async {
     try {
-      final lotto = await loadLottoData();
+      final LottoGetResponse lotto = await loadLottoData();
       final basketCheckResponse = await http.get(
         Uri.parse(
             '$API_ENDPOINT/check-basket?uid=${widget.uid}&lid=${widget.lid}'),
@@ -296,10 +297,42 @@ class _AddBasketPageState extends State<AddBasketPage> {
 
       if (basketCheckResponse.statusCode == 200) {
         final basketCheckData = json.decode(basketCheckResponse.body);
+        final availableQuantity = lotto.lottoQuantity;
 
         if (basketCheckData['exists']) {
-          // ถ้า `lid` มีอยู่ในตะกร้าแล้ว, เพิ่ม `quantity`
-          final newQuantity = basketCheckData['quantity'] + quantity;
+          final currentQuantity = basketCheckData['quantity'] ?? 0;
+          final newQuantity = currentQuantity + quantity;
+
+          if (newQuantity > availableQuantity) {
+            Get.snackbar(
+              '',
+              '',
+              titleText: Text(
+                'เพิ่มลงตะกร้าไม่ได้',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+              messageText: Text(
+                'ไม่สามารถเพิ่มเกินกว่าสินค้าที่เหลืออยู่',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Color(0xFFF92A47),
+              margin: EdgeInsets.all(30),
+              borderRadius: 22,
+            );
+            return;
+          }
+
           final updateBasketData = {
             'lid': widget.lid,
             'uid': widget.uid,
@@ -314,11 +347,66 @@ class _AddBasketPageState extends State<AddBasketPage> {
 
           if (updateResponse.statusCode == 200) {
             print('Updated basket successfully');
+            Get.snackbar(
+              '',
+              '',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.blue,
+              margin: EdgeInsets.all(30),
+              borderRadius: 20,
+              titleText: Text(
+                'เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้ว',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFFFFFF),
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+              messageText: Text(
+                'หมายเลข: ${lotto.number}',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFFFFFFFF),
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+            );
           } else {
             print('Failed to update basket: ${updateResponse.body}');
           }
         } else {
-          // ถ้า `lid` ยังไม่มีในตะกร้า, เพิ่มรายการใหม่
+          if (quantity > availableQuantity) {
+            Get.snackbar(
+              '',
+              '',
+              titleText: Text(
+                'เพิ่มลงตะกร้าไม่ได้',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+              messageText: Text(
+                'ไม่สามารถเพิ่มเกินกว่าสินค้าที่เหลืออยู่',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Color(0xFFF92A47),
+              margin: EdgeInsets.all(30),
+              borderRadius: 22,
+            );
+            return;
+          }
+
           final basketData = {
             'lid': widget.lid,
             'uid': widget.uid,
@@ -333,6 +421,32 @@ class _AddBasketPageState extends State<AddBasketPage> {
 
           if (response.statusCode == 200) {
             print('Added to basket successfully');
+            Get.snackbar(
+              '',
+              '',
+              snackPosition: SnackPosition.TOP,
+              backgroundColor: Colors.blue,
+              margin: EdgeInsets.all(30),
+              borderRadius: 22,
+              titleText: Text(
+                'เพิ่มสินค้าลงตะกร้าเรียบร้อยแล้ว',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFFFFFF),
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+              messageText: Text(
+                'หมายเลข: ${lotto.number}',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFFFFFFFF),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'SukhumvitSet',
+                ),
+              ),
+            );
           } else {
             print('Failed to add to basket: ${response.body}');
           }
@@ -340,15 +454,14 @@ class _AddBasketPageState extends State<AddBasketPage> {
       } else {
         throw Exception('Failed to check basket');
       }
-
-      // แสดง SnackBar เพื่อแจ้งเตือนผู้ใช้
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เพิ่มลงตะกร้าแล้ว: ${lotto.number}')),
-      );
     } catch (e) {
       print('Error adding to basket: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('เกิดข้อผิดพลาดในการเพิ่มลงตะกร้า')),
+      Get.snackbar(
+        'ข้อผิดพลาด',
+        'เกิดข้อผิดพลาดในการเพิ่มลงตะกร้า',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
       );
     }
   }

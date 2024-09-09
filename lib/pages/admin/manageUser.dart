@@ -41,209 +41,218 @@ class _ManageUserState extends State<ManageUser> {
         ? (MediaQuery.of(context).size.width / 2) - 20
         : (MediaQuery.of(context).size.width / 3) - 20;
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Colors.white,
-      appBar: Navbar(
-        loadDataUser: loadDataUser,
-        scaffoldKey: _scaffoldKey,
-      ),
-      drawer: FutureBuilder<UsersLoginPostResponse>(
-        future: loadDataUser,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Drawer(
-                child: Center(child: CircularProgressIndicator()));
-          }
-          if (snapshot.hasError) {
-            return Drawer(
-                child: Center(child: Text('Error: ${snapshot.error}')));
-          }
-          final user = snapshot.data!;
-          return CustomerSidebar(
-            imageUrl: user.image ?? '',
-            username: user.username,
-            uid: user.uid,
-            currentPage: 'manageUser',
-          );
-        },
-      ),
-      body: SingleChildScrollView(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FutureBuilder<UsersLoginPostResponse>(
-              future: loadDataUser,
-              builder: (context, userSnapshot) {
-                if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (userSnapshot.hasError) {
-                  return Center(child: Text('Error: ${userSnapshot.error}'));
-                }
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                          padding: EdgeInsets.only(left: 15, top: 5),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'มาจัดการคนซื้อหวยกันเถอะ!',
-                                  style: TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Color(0xFF7B7B7C),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.white,
+        appBar: Navbar(
+          loadDataUser: loadDataUser,
+          scaffoldKey: _scaffoldKey,
+        ),
+        drawer: FutureBuilder<UsersLoginPostResponse>(
+          future: loadDataUser,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Drawer(
+                  child: Center(child: CircularProgressIndicator()));
+            }
+            if (snapshot.hasError) {
+              return Drawer(
+                  child: Center(child: Text('Error: ${snapshot.error}')));
+            }
+            final user = snapshot.data!;
+            return CustomerSidebar(
+              imageUrl: user.image ?? '',
+              username: user.username,
+              uid: user.uid,
+              currentPage: 'manageUser',
+            );
+          },
+        ),
+        body: SingleChildScrollView(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FutureBuilder<UsersLoginPostResponse>(
+                future: loadDataUser,
+                builder: (context, userSnapshot) {
+                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (userSnapshot.hasError) {
+                    return Center(child: Text('Error: ${userSnapshot.error}'));
+                  }
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                            padding: EdgeInsets.only(left: 15, top: 5),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'มาจัดการคนซื้อหวยกันเถอะ!',
+                                    style: TextStyle(
+                                      fontFamily: 'SukhumvitSet',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Color(0xFF7B7B7C),
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  'จัดการข้อมูลสมาชิก',
-                                  style: TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 30,
-                                    color: Color(0xFF000000),
+                                  Text(
+                                    'จัดการข้อมูลสมาชิก',
+                                    style: TextStyle(
+                                      fontFamily: 'SukhumvitSet',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 30,
+                                      color: Color(0xFF000000),
+                                    ),
                                   ),
-                                ),
-                              ])),
-                      FutureBuilder<List<UsergetAlldata>>(
-                        future: loadAlldataUser,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          if (snapshot.hasError) {
+                                ])),
+                        FutureBuilder<List<UsergetAlldata>>(
+                          future: loadAlldataUser,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            }
+                            final List<UsergetAlldata> users = snapshot.data!;
                             return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          }
-                          final List<UsergetAlldata> users = snapshot.data!;
-                          return Center(
-                            child: Container(
-                              child: Wrap(
-                                spacing: 5.0, // ระยะห่างระหว่างการ์ดในแนวนอน
-                                runSpacing:
-                                    5.0, // ระยะห่างระหว่างการ์ดในแนวตั้ง
-                                children: List.generate(users.length, (index) {
-                                  final user = users[index];
-                                  Color cardColor = index % 2 == 0
-                                      ? const Color.fromARGB(255, 1, 56, 86)
-                                      : const Color.fromARGB(
-                                          255, 243, 241, 241); // ใช้สีตามลำดับ
-                                  Color fontColor = index % 2 == 0
-                                      ? const Color.fromARGB(255, 255, 255, 255)
-                                      : const Color.fromARGB(255, 1, 56, 86);
+                              child: Container(
+                                child: Wrap(
+                                  spacing: 5.0, // ระยะห่างระหว่างการ์ดในแนวนอน
+                                  runSpacing:
+                                      5.0, // ระยะห่างระหว่างการ์ดในแนวตั้ง
+                                  children:
+                                      List.generate(users.length, (index) {
+                                    final user = users[index];
+                                    Color cardColor = index % 2 == 0
+                                        ? const Color.fromARGB(255, 1, 56, 86)
+                                        : const Color.fromARGB(255, 243, 241,
+                                            241); // ใช้สีตามลำดับ
+                                    Color fontColor = index % 2 == 0
+                                        ? const Color.fromARGB(
+                                            255, 255, 255, 255)
+                                        : const Color.fromARGB(255, 1, 56, 86);
 
-                                  return SizedBox(
-                                    width: cardwidth,
-                                    height:
-                                        150, // กำหนดความกว้างของการ์ดให้เหมาะสม
-                                    child: Card(
-                                      color: cardColor,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.wallet,
-                                                  color: Color.fromARGB(
-                                                      228,
-                                                      226,
-                                                      174,
-                                                      15), // ตั้งค่าสีของไอคอน
-                                                ),
-                                                const SizedBox(
-                                                  width:
-                                                      3, // เพิ่มระยะห่างระหว่างไอคอนและข้อความ
-                                                ),
-                                                Text(
-                                                  '${user.wallet}',
-                                                  style: const TextStyle(
+                                    return SizedBox(
+                                      width: cardwidth,
+                                      height:
+                                          150, // กำหนดความกว้างของการ์ดให้เหมาะสม
+                                      child: Card(
+                                        color: cardColor,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.wallet,
                                                     color: Color.fromARGB(
                                                         228,
                                                         226,
                                                         174,
-                                                        15), // ตั้งค่าสีของข้อความ
+                                                        15), // ตั้งค่าสีของไอคอน
+                                                  ),
+                                                  const SizedBox(
+                                                    width:
+                                                        3, // เพิ่มระยะห่างระหว่างไอคอนและข้อความ
+                                                  ),
+                                                  Text(
+                                                    '${user.wallet}',
+                                                    style: const TextStyle(
+                                                      color: Color.fromARGB(
+                                                          228,
+                                                          226,
+                                                          174,
+                                                          15), // ตั้งค่าสีของข้อความ
+                                                    ),
+                                                  ),
+                                                  const Spacer(),
+                                                  IconButton(
+                                                    onPressed: () {},
+                                                    icon: const Icon(
+                                                      Icons.more_horiz,
+                                                      color: Color.fromARGB(
+                                                          228,
+                                                          226,
+                                                          174,
+                                                          15), // ตั้งค่าสีของไอคอนปุ่ม
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Center(
+                                                child: Text(
+                                                  user.username,
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontFamily: 'SukhumvitSet',
+                                                    fontWeight: FontWeight.w700,
+                                                    color: fontColor,
                                                   ),
                                                 ),
-                                                const Spacer(),
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.more_horiz,
-                                                    color: Color.fromARGB(
-                                                        228,
-                                                        226,
-                                                        174,
-                                                        15), // ตั้งค่าสีของไอคอนปุ่ม
+                                              ),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 8),
+                                                child: Center(
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    height: 1.5,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              228,
+                                                              226,
+                                                              174,
+                                                              15),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                user.username,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                'ชื่อ-สกุล : ${user.fullname}',
                                                 style: TextStyle(
-                                                  fontSize: 20,
                                                   fontFamily: 'SukhumvitSet',
-                                                  fontWeight: FontWeight.w700,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 11,
                                                   color: fontColor,
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.only(top: 8),
-                                              child: Center(
-                                                child: Container(
-                                                  width: double.infinity,
-                                                  height: 1.5,
-                                                  decoration: BoxDecoration(
-                                                    color: const Color.fromARGB(
-                                                        228, 226, 174, 15),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              'ชื่อ-สกุล : ${user.fullname}',
-                                              style: TextStyle(
-                                                fontFamily: 'SukhumvitSet',
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 11,
-                                                color: fontColor,
-                                              ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                }),
+                                    );
+                                  }),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      )
-                    ]);
-              }),
-        ],
-      )),
-      bottomNavigationBar: NavBottom(
-        uid: widget.uid,
-        selectedIndex: 1,
+                            );
+                          },
+                        )
+                      ]);
+                }),
+          ],
+        )),
+        bottomNavigationBar: NavBottom(
+          uid: widget.uid,
+          selectedIndex: 1,
+        ),
       ),
     );
   }
