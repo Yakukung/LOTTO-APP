@@ -317,7 +317,7 @@ class _AddBasketPageState extends State<AddBasketPage> {
                 ),
               ),
               messageText: Text(
-                'ไม่สามารถเพิ่มเกินกว่าสินค้าที่เหลืออยู่',
+                'คุณเพิ่มสินค้านี้ในตะกร้าของคุณหมดแล้ว',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
@@ -391,7 +391,7 @@ class _AddBasketPageState extends State<AddBasketPage> {
                 ),
               ),
               messageText: Text(
-                'ไม่สามารถเพิ่มเกินกว่าสินค้าที่เหลืออยู่',
+                'คุณเพิ่มสินค้านี้ในตะกร้าของคุณหมดแล้ว',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,

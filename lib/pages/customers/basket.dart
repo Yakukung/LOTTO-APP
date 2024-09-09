@@ -277,12 +277,15 @@ class _BasketPageState extends State<BasketPage> {
                                                               setState(() {
                                                                 basketItems =
                                                                     items;
-                                                                itemSelectionStatus =
-                                                                    List.generate(
-                                                                        items
-                                                                            .length,
-                                                                        (_) =>
-                                                                            false);
+                                                                itemSelectionStatus = List.generate(
+                                                                    basketItems
+                                                                        .length,
+                                                                    (i) => i <
+                                                                            itemSelectionStatus
+                                                                                .length
+                                                                        ? itemSelectionStatus[
+                                                                            i]
+                                                                        : false);
                                                                 updateTotalPrice();
                                                               });
                                                             });
