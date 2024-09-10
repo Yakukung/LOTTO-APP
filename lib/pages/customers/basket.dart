@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class _BasketPageState extends State<BasketPage> {
   List<BasketGetResponse> basketItems = [];
   List<bool> itemSelectionStatus = [];
   int totalPrice = 0;
+  int quantity = 1;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -40,17 +43,6 @@ class _BasketPageState extends State<BasketPage> {
         updateTotalPrice();
       });
     }).catchError((error) => print("Error loading basket data: $error"));
-  }
-
-  void updateTotalPrice() {
-    setState(() {
-      totalPrice = basketItems
-          .asMap()
-          .entries
-          .where((entry) => itemSelectionStatus[entry.key])
-          .fold(0,
-              (sum, entry) => sum + entry.value.price * entry.value.quantity);
-    });
   }
 
   @override
@@ -407,7 +399,13 @@ class _BasketPageState extends State<BasketPage> {
                                                                     MainAxisAlignment
                                                                         .spaceAround,
                                                                 children: [
-                                                                  InkWell(
+                                                                  GestureDetector(
+                                                                    onLongPressStart: (_) =>
+                                                                        _startDecreasing(
+                                                                            item),
+                                                                    onLongPressEnd:
+                                                                        (_) =>
+                                                                            _stopTimer(),
                                                                     onTap: () {
                                                                       if (item.quantity >
                                                                           1) {
@@ -415,6 +413,8 @@ class _BasketPageState extends State<BasketPage> {
                                                                             () {
                                                                           item.quantity--;
                                                                           updateTotalPrice();
+                                                                          _updateQuantity(
+                                                                              item);
                                                                         });
                                                                       }
                                                                     },
@@ -435,7 +435,13 @@ class _BasketPageState extends State<BasketPage> {
                                                                       color: Colors
                                                                               .grey[
                                                                           400]),
-                                                                  InkWell(
+                                                                  GestureDetector(
+                                                                    onLongPressStart: (_) =>
+                                                                        _startIncreasing(
+                                                                            item),
+                                                                    onLongPressEnd:
+                                                                        (_) =>
+                                                                            _stopTimer(),
                                                                     onTap: () {
                                                                       if (item.quantity <
                                                                           item.lottoQuantity) {
@@ -443,6 +449,8 @@ class _BasketPageState extends State<BasketPage> {
                                                                             () {
                                                                           item.quantity++;
                                                                           updateTotalPrice();
+                                                                          _updateQuantity(
+                                                                              item);
                                                                         });
                                                                       }
                                                                     },
@@ -532,7 +540,19 @@ class _BasketPageState extends State<BasketPage> {
                           width: double.infinity,
                           height: 35,
                           child: FilledButton(
-                            onPressed: _Payment,
+                            onPressed: () {
+                              List<BasketGetResponse> selectedItems =
+                                  basketItems
+                                      .asMap()
+                                      .entries
+                                      .where((entry) =>
+                                          itemSelectionStatus[entry.key] ==
+                                          true)
+                                      .map((entry) => entry.value)
+                                      .toList();
+
+                              _Payment(selectedItems);
+                            },
                             style: FilledButton.styleFrom(
                               backgroundColor: const Color(0xFFF92A47),
                               shape: RoundedRectangleBorder(
@@ -747,5 +767,301 @@ class _BasketPageState extends State<BasketPage> {
     );
   }
 
-  void _Payment() {}
+  void updateTotalPrice() {
+    setState(() {
+      totalPrice = basketItems
+          .asMap()
+          .entries
+          .where((entry) => itemSelectionStatus[entry.key])
+          .fold(0,
+              (sum, entry) => sum + entry.value.price * entry.value.quantity);
+    });
+  }
+
+  void _Payment(List<BasketGetResponse> selectedItems) async {
+    try {
+      final user = await fetchUserData(widget.uid);
+      final double userWallet = user.wallet;
+      double totalPrice = 0;
+
+      // คำนวณราคาโดยรวมทั้งหมด
+      for (var item in selectedItems) {
+        totalPrice += item.price * item.quantity;
+      }
+
+      print("\n============================");
+      print("ผู้ซื้อ Uid: ${widget.uid}");
+      print("รวมทั้งหมด: $totalPrice");
+      print("Wallet ของผู้ใช้: $userWallet");
+      print("\n============================");
+
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+              Container(
+                height: 280,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35),
+                    topRight: Radius.circular(35),
+                  ),
+                ),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 6,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'ชำระเงิน',
+                      style: TextStyle(
+                        fontFamily: 'SukhumvitSet',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'คุณต้องการชำเงินใช่ไหม?',
+                      style: TextStyle(
+                        fontFamily: 'SukhumvitSet',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'ยกเลิก',
+                            style: TextStyle(
+                              fontFamily: 'SukhumvitSet',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            if (totalPrice > userWallet) {
+                              print("เงินใน wallet ไม่เพียงพอ");
+                              Get.snackbar(
+                                '',
+                                '',
+                                snackPosition: SnackPosition.TOP,
+                                backgroundColor: Color(0xFFF92A47),
+                                margin: EdgeInsets.all(30),
+                                borderRadius: 22,
+                                titleText: Text(
+                                  'ชำระเงินไม่สำเร็จ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFFFFF),
+                                    fontFamily: 'SukhumvitSet',
+                                  ),
+                                ),
+                                messageText: Text(
+                                  'ยอด Wallet ของคุณไม่พอ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'SukhumvitSet',
+                                  ),
+                                ),
+                              );
+                            } else {
+                              for (var item in selectedItems) {
+                                var res = await http.post(
+                                  Uri.parse('$API_ENDPOINT/payment'),
+                                  headers: {'Content-Type': 'application/json'},
+                                  body: jsonEncode({
+                                    'lid': item.lid,
+                                    'uid': widget.uid,
+                                    'quantity': item.quantity,
+                                    'total_price': item.price * item.quantity
+                                  }),
+                                );
+
+                                if (res.statusCode != 200) {
+                                  print('ไม่สามารถชำระเงินได้: ${res.body}');
+                                  Get.snackbar(
+                                    '',
+                                    '',
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Color(0xFFF92A47),
+                                    margin: EdgeInsets.all(30),
+                                    borderRadius: 22,
+                                    titleText: Text(
+                                      'ชำระเงินไม่สำเร็จ',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFFFFFFFF),
+                                        fontFamily: 'SukhumvitSet',
+                                      ),
+                                    ),
+                                    messageText: Text(
+                                      'ไม่สามารถชำระเงินได้',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Color(0xFFFFFFFF),
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'SukhumvitSet',
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+                              }
+                              loadBasketLotto = loadBasketData();
+                              loadBasketLotto.then((items) {
+                                setState(() {
+                                  basketItems = items;
+                                  itemSelectionStatus =
+                                      List.generate(items.length, (_) => false);
+                                  updateTotalPrice();
+                                });
+                              });
+                              Get.snackbar(
+                                '',
+                                '',
+                                snackPosition: SnackPosition.TOP,
+                                backgroundColor: Colors.blue,
+                                margin: EdgeInsets.all(30),
+                                borderRadius: 22,
+                                titleText: Text(
+                                  'ชำระเงินสำเร็จ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFFFFF),
+                                    fontFamily: 'SukhumvitSet',
+                                  ),
+                                ),
+                                messageText: Text(
+                                  'LOTTO ที่คุณซื้อจะอยู่ที่หน้า "LOTTO ของฉัน"',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'SukhumvitSet',
+                                  ),
+                                ),
+                              );
+                              navigator?.pop();
+                            }
+                          },
+                          child: const Text(
+                            'ชำระเงิน',
+                            style: TextStyle(
+                              fontFamily: 'SukhumvitSet',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.blue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      print("เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้: $e");
+    }
+  }
+
+  void _startIncreasing(BasketGetResponse item) {
+    _stopTimer();
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (item.quantity < item.lottoQuantity) {
+        setState(() {
+          item.quantity++;
+          updateTotalPrice();
+        });
+        Future.delayed(Duration(milliseconds: 100), () {
+          _updateQuantity(item);
+        });
+      } else {
+        _stopTimer();
+      }
+    });
+  }
+
+  void _startDecreasing(BasketGetResponse item) {
+    _stopTimer();
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (item.quantity > 1) {
+        setState(() {
+          item.quantity--;
+          updateTotalPrice();
+        });
+        Future.delayed(Duration(milliseconds: 100), () {
+          _updateQuantity(item);
+        });
+      } else {
+        _stopTimer();
+      }
+    });
+  }
+
+  void _updateQuantity(BasketGetResponse item) async {
+    try {
+      final res = await http.put(
+        Uri.parse('$API_ENDPOINT/basket/quantity'), // แก้ไขตาม URL API ของคุณ
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'uid': widget.uid,
+          'lid': item.lid,
+          'quantity': item.quantity,
+        }),
+      );
+
+      if (res.statusCode == 200) {
+        print('อัปเดตจำนวนสินค้าในฐานข้อมูลสำเร็จ');
+      } else {
+        print('ไม่สามารถอัปเดตจำนวนสินค้าได้: ${res.body}');
+      }
+    } catch (e) {
+      print('เกิดข้อผิดพลาดในการอัปเดตจำนวนสินค้า: $e');
+    }
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+    _timer = null; // รีเซ็ตตัวแปร Timer
+  }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lotto_app/config/internal_config.dart';
@@ -18,6 +19,7 @@ class AddBasketPage extends StatefulWidget {
 class _AddBasketPageState extends State<AddBasketPage> {
   late Future<LottoGetResponse> loadDataLotto;
   int quantity = 1;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -164,7 +166,10 @@ class _AddBasketPageState extends State<AddBasketPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                InkWell(
+                                GestureDetector(
+                                  onLongPressStart: (_) =>
+                                      _startDecreasing(), // เพิ่มการเรียกใช้ _startDecreasing
+                                  onLongPressEnd: (_) => _stopTimer(),
                                   onTap: () {
                                     if (quantity > 1) {
                                       setState(() {
@@ -183,7 +188,9 @@ class _AddBasketPageState extends State<AddBasketPage> {
                                   height: 24,
                                   color: Colors.grey[400],
                                 ),
-                                InkWell(
+                                GestureDetector(
+                                  onLongPressStart: (_) => _startIncreasing(),
+                                  onLongPressEnd: (_) => _stopTimer(),
                                   onTap: () {
                                     setState(() {
                                       if (quantity < lotto.lottoQuantity) {
@@ -464,5 +471,30 @@ class _AddBasketPageState extends State<AddBasketPage> {
         colorText: Colors.white,
       );
     }
+  }
+
+  void _startIncreasing() {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (quantity < 100) {
+        setState(() {
+          quantity++;
+        });
+      }
+    });
+  }
+
+  void _startDecreasing() {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if (quantity > 1) {
+        // แก้ไขขีดจำกัดต่ำสุดของปริมาณ
+        setState(() {
+          quantity--;
+        });
+      }
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
   }
 }

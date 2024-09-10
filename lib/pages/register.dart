@@ -17,22 +17,14 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _obscureText = true;
+  bool _obscureTextCF = true;
   String errorText = '';
   TextEditingController usernameCtl = TextEditingController();
   TextEditingController fullnameCtl = TextEditingController();
   TextEditingController emailCtl = TextEditingController();
   TextEditingController phoneCtl = TextEditingController();
   TextEditingController passwordCtl = TextEditingController();
-  TextEditingController walletCtl = TextEditingController();
-  String? _selectedWalletAmount;
-
-  final List<String> _walletAmounts = [
-    '100',
-    '200',
-    '300',
-    '500',
-    '1000',
-  ];
+  TextEditingController confirmpasswordtCtl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -243,54 +235,38 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F7),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.wallet, color: Colors.black),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: _selectedWalletAmount,
-                            hint: const Text(
-                              'เลือกจำนวน Wallet',
-                              style: TextStyle(
-                                fontFamily: 'SukhumvitSet',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Color(0xFF7B7B7C),
-                              ),
-                            ),
-                            items: _walletAmounts.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Color(0xFF000000),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedWalletAmount = newValue;
-                              });
-                            },
-                            dropdownColor: const Color(0xFFF5F5F7),
-                            isExpanded: true,
-                          ),
-                        ),
+                TextField(
+                  controller: confirmpasswordtCtl,
+                  obscureText: _obscureTextCF,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: const Color(0xFFF5F5F7),
+                    hintText: 'ยืนยันรหัสผ่าน',
+                    hintStyle: const TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color(0xFF7B7B7C),
+                    ),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureTextCF
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                       ),
-                    ],
+                      onPressed: _toggleCFPasswordVisibility,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(18),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  style: const TextStyle(
+                    fontFamily: 'SukhumvitSet',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Color(0xFF000000),
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -405,9 +381,13 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
+    setState(() {});
+    _obscureText = !_obscureText;
+  }
+
+  void _toggleCFPasswordVisibility() {
+    setState(() {});
+    _obscureTextCF = !_obscureTextCF;
   }
 
   Future<void> register() async {
@@ -416,77 +396,81 @@ class _RegisterPageState extends State<RegisterPage> {
     log('email: ${emailCtl.text}');
     log('phone: ${phoneCtl.text}');
     log('password: ${passwordCtl.text}');
-    log('wallet: ${_selectedWalletAmount}');
+    log('confrimpass: ${confirmpasswordtCtl}');
 
     if (usernameCtl.text.isEmpty ||
         fullnameCtl.text.isEmpty ||
         emailCtl.text.isEmpty ||
         phoneCtl.text.isEmpty ||
         passwordCtl.text.isEmpty ||
-        _selectedWalletAmount == null) {
+        confirmpasswordtCtl.text.isEmpty) {
       setState(() {
         errorText = 'กรุณาใส่ข้อมูลให้ครบทุกช่อง';
       });
       _showErrorDialog('กรุณาใส่ข้อมูลให้ครบทุกช่อง');
       return;
     }
-
-    double walletAmount = double.tryParse(_selectedWalletAmount!) ?? 0.00;
-
-    var data = UsersRegisterPostRequest(
-      username: usernameCtl.text,
-      fullname: fullnameCtl.text,
-      email: emailCtl.text,
-      phone: phoneCtl.text,
-      password: passwordCtl.text,
-      wallet: walletAmount,
-    );
-    log('Sending data: ${jsonEncode(data.toJson())}');
-
-    try {
-      var response = await http.post(
-        Uri.parse('$API_ENDPOINT/register'),
-        headers: {"Content-Type": "application/json; charset=utf-8"},
-        body: jsonEncode(data.toJson()),
+    if (confirmpasswordtCtl.text == passwordCtl.text) {
+      var data = UsersRegisterPostRequest(
+        username: usernameCtl.text,
+        fullname: fullnameCtl.text,
+        email: emailCtl.text,
+        phone: phoneCtl.text,
+        password: passwordCtl.text,
       );
-      log('Status code: ${response.statusCode}');
-      log('Response body: ${response.body}');
+      log('Sending data: ${jsonEncode(data.toJson())}');
 
-      if (response.statusCode == 200) {
-        _showSuccessDialog(); // Show success dialog
-      } else {
-        var responseData = jsonDecode(response.body);
-        log('Response data: $responseData');
+      try {
+        var response = await http.post(
+          Uri.parse('$API_ENDPOINT/register'),
+          headers: {"Content-Type": "application/json; charset=utf-8"},
+          body: jsonEncode(data.toJson()),
+        );
+        log('Status code: ${response.statusCode}');
+        log('Response body: ${response.body}');
 
-        String errorMessage = 'ไม่สามารถลงทะเบียนได้ ลองใหม่อีกครั้ง';
+        if (response.statusCode == 200) {
+          _showSuccessDialog(); // Show success dialog
+        } else {
+          var responseData = jsonDecode(response.body);
+          log('Response data: $responseData');
 
-        if (responseData is Map<String, dynamic> &&
-            responseData.containsKey('error')) {
-          String errorType = responseData['error'];
+          String errorMessage = 'ไม่สามารถลงทะเบียนได้ ลองใหม่อีกครั้ง';
 
-          if (errorType.contains('UNIQUE constraint failed')) {
-            if (errorType.contains('users.username')) {
-              errorMessage = 'ชื่อผู้ใช้นี้มีการใช้งานอยู่แล้ว';
-            } else if (errorType.contains('users.email')) {
-              errorMessage = 'อีเมลนี้มีการใช้งานอยู่แล้ว';
-            } else if (errorType.contains('users.phone')) {
-              errorMessage = 'หมายเลขโทรศัพท์นี้มีการใช้งานอยู่แล้ว';
+          if (responseData is Map<String, dynamic> &&
+              responseData.containsKey('error')) {
+            String errorType = responseData['error'];
+
+            if (errorType.contains('UNIQUE constraint failed')) {
+              if (errorType.contains('users.username')) {
+                errorMessage = 'ชื่อผู้ใช้นี้มีการใช้งานอยู่แล้ว';
+              } else if (errorType.contains('users.email')) {
+                errorMessage = 'อีเมลนี้มีการใช้งานอยู่แล้ว';
+              } else if (errorType.contains('users.phone')) {
+                errorMessage = 'หมายเลขโทรศัพท์นี้มีการใช้งานอยู่แล้ว';
+              }
             }
           }
-        }
 
+          setState(() {
+            errorText = errorMessage;
+          });
+          _showErrorDialog(errorMessage);
+        }
+      } catch (e) {
+        log('Error: $e');
         setState(() {
-          errorText = errorMessage;
+          errorText = 'ไม่สามารถลงทะเบียนได้ ลองใหม่อีกครั้ง';
         });
-        _showErrorDialog(errorMessage);
+        _showErrorDialog(
+            'ไม่สามารถลงทะเบียนได้ ลองใหม่อีกครั้ง'); // Show error dialog
       }
-    } catch (e) {
-      log('Error: $e');
+    } else {
       setState(() {
-        errorText = 'ไม่สามารถลงทะเบียนได้ ลองใหม่อีกครั้ง';
+        errorText = 'กรุณาใส่รหัสผ่านให้เหมือนกัน';
       });
-      _showErrorDialog(
-          'ไม่สามารถลงทะเบียนได้ ลองใหม่อีกครั้ง'); // Show error dialog
+      _showErrorDialog('กรุณาใส่รหัสผ่านให้เหมือนกัน');
+      return;
     }
   }
 

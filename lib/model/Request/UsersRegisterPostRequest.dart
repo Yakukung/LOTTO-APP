@@ -17,7 +17,6 @@ class UsersRegisterPostRequest {
   String email;
   String phone;
   String password;
-  double wallet;
 
   UsersRegisterPostRequest({
     required this.fullname,
@@ -25,7 +24,6 @@ class UsersRegisterPostRequest {
     required this.email,
     required this.phone,
     required this.password,
-    required this.wallet,
   });
 
   factory UsersRegisterPostRequest.fromJson(Map<String, dynamic> json) =>
@@ -35,7 +33,6 @@ class UsersRegisterPostRequest {
         email: json["email"],
         phone: json["phone"],
         password: json["password"],
-        wallet: json["wallet"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,6 +41,5 @@ class UsersRegisterPostRequest {
         "email": email,
         "phone": phone,
         "password": password,
-        "wallet": wallet,
       };
 }
