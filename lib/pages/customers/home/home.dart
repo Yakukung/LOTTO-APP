@@ -173,12 +173,17 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(lottoData.formattedDate,
-                        style: const TextStyle(
-                            fontFamily: 'SukhumvitSet',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Colors.white)),
+                    Row(
+                      children: [
+                        SizedBox(width: 15),
+                        Text(lottoData.formattedDate,
+                            style: const TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                color: Colors.white)),
+                      ],
+                    ),
                     Text('รางวัลที่ ${lottoData.prize}',
                         style: const TextStyle(
                             fontFamily: 'SukhumvitSet',
