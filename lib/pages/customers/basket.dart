@@ -898,7 +898,8 @@ class _BasketPageState extends State<BasketPage> {
                                   ),
                                 ),
                               );
-                            } else {
+                            } else if (totalPrice < userWallet &&
+                                totalPrice != 0) {
                               for (var item in selectedItems) {
                                 var res = await http.post(
                                   Uri.parse('$API_ENDPOINT/payment'),
@@ -978,6 +979,34 @@ class _BasketPageState extends State<BasketPage> {
                                 ),
                               );
                               navigator?.pop();
+                            } else {
+                              navigator?.pop();
+                              Get.snackbar(
+                                '',
+                                '',
+                                snackPosition: SnackPosition.TOP,
+                                backgroundColor: Color(0xFFF92A47),
+                                margin: EdgeInsets.all(30),
+                                borderRadius: 22,
+                                titleText: Text(
+                                  'ชำระเงินไม่สำเร็จ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFFFFFFFF),
+                                    fontFamily: 'SukhumvitSet',
+                                  ),
+                                ),
+                                messageText: Text(
+                                  'คุณยังไม่ได้เลือกซื้อสินค้า"',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'SukhumvitSet',
+                                  ),
+                                ),
+                              );
                             }
                           },
                           child: const Text(
