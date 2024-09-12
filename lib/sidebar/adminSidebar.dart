@@ -1,10 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:lotto_app/config/internal_config.dart';
 import 'package:lotto_app/pages/admin/adminHome.dart';
 import 'package:lotto_app/pages/admin/manageUser.dart';
 import 'package:lotto_app/pages/intro.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 
 class CustomerSidebar extends StatelessWidget {
   final String imageUrl;
@@ -397,9 +399,9 @@ class CustomerSidebar extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () => resetLottoTable(context),
                         child: Text(
-                          'ออกจากระบบ',
+                          'รีเซ็ตค่าเริ่มต้น',
                           style: TextStyle(
                             fontFamily: 'SukhumvitSet',
                             fontWeight: FontWeight.bold,
@@ -417,5 +419,55 @@ class CustomerSidebar extends StatelessWidget {
         );
       },
     );
+  }
+
+  void resetLottoTable(BuildContext context) async {
+    final url = Uri.parse('$API_ENDPOINT/admin/reset');
+
+    try {
+      final response = await http.delete(url);
+
+      if (response.statusCode == 200) {
+        Get.snackbar(
+          '',
+          '',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.blue,
+          margin: EdgeInsets.all(30),
+          borderRadius: 20,
+          titleText: Text(
+            'แจ้งเตือน!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFFFFFFF),
+              fontFamily: 'SukhumvitSet',
+            ),
+          ),
+          messageText: Text(
+            'รีเซ็ตค่าเริ่มต้นสำเร็จแย้ววววว',
+            style: TextStyle(
+              fontSize: 18,
+              color: Color(0xFFFFFFFF),
+              fontWeight: FontWeight.bold,
+              fontFamily: 'SukhumvitSet',
+            ),
+          ),
+        );
+        print('Table "lotto" deleted successfully');
+        Navigator.of(context).pop();
+      } else {
+        // ถ้ามีข้อผิดพลาด
+        print('Failed to delete table: ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete table: ${response.body}')),
+        );
+      }
+    } catch (error) {
+      print('Error: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $error')),
+      );
+    }
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
 import 'package:lotto_app/nav/navbar.dart';
 import 'package:lotto_app/nav/navbottomAdmin.dart';
+import 'package:lotto_app/pages/admin/profileUser.dart';
 import 'package:lotto_app/sidebar/adminSidebar.dart';
 import 'package:lotto_app/config/internal_config.dart';
 import 'package:lotto_app/model/Response/allUserGetResponse.dart';
@@ -144,8 +146,7 @@ class _ManageUserState extends State<ManageUser> {
 
                                     return SizedBox(
                                       width: cardwidth,
-                                      height:
-                                          150, // กำหนดความกว้างของการ์ดให้เหมาะสม
+                                      height: 150,
                                       child: Card(
                                         color: cardColor,
                                         child: Padding(
@@ -180,7 +181,9 @@ class _ManageUserState extends State<ManageUser> {
                                                   ),
                                                   const Spacer(),
                                                   IconButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      _showProfile(user.uid);
+                                                    },
                                                     icon: const Icon(
                                                       Icons.more_horiz,
                                                       color: Color.fromARGB(
@@ -267,24 +270,7 @@ class _ManageUserState extends State<ManageUser> {
       throw Exception('Failed to load user data');
     }
   }
-  // Future<UsergetAlldata> fetchAllUser() async {
-  //   var config = await Configuration.getConfig();
-  //   url = config['apiEndpoint'];
 
-  //   var res = await http.get(Uri.parse('$url/trips'));
-  //   log(res.body);
-  //   userGetResponses = usergetAlldataFromJson(res.body);
-
-  // }
-//   Future<UsergetAlldata> fetchAllUser() async {
-//   final response = await http.get(Uri.parse('$API_ENDPOINT/allusers'));
-//   if (response.statusCode == 200) {
-//     final data = json.decode(response.body);
-//     return UsergetAlldata.fromJson(data);
-//   } else {
-//     throw Exception('Failed to load user data');
-//   }
-// }
   Future<List<UsergetAlldata>> fetchAllUser() async {
     final response = await http.get(Uri.parse('$API_ENDPOINT/allusers'));
     if (response.statusCode == 200) {
@@ -293,5 +279,9 @@ class _ManageUserState extends State<ManageUser> {
     } else {
       throw Exception('Failed to load user data');
     }
+  }
+
+  void _showProfile(int uid) {
+    Get.to(() => ProfileUser(uid: uid));
   }
 }

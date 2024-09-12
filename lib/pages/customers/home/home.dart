@@ -434,19 +434,42 @@ class _HomePageState extends State<HomePage> {
   Future<List<LottoGetResponse>> loadDataLottoPrizeAsync() async {
     var config = await Configuration.getConfig();
     var res = await http.get(Uri.parse('${config['apiEndpoint']}/lotto-prize'));
+
     if (res.statusCode == 200) {
       List<dynamic> data = jsonDecode(res.body);
+
+      if (data.isEmpty) {
+        // ถ้าไม่มีข้อมูลให้คืนค่ารายการว่าง
+        return [];
+      }
+
       List<LottoGetResponse> allLottoData =
           data.map((item) => LottoGetResponse.fromJson(item)).toList();
+
+      if (allLottoData.isEmpty) {
+        // ถ้าไม่มีข้อมูลให้คืนค่ารายการว่าง
+        return [];
+      }
+
       DateTime mostRecentDate = allLottoData
           .map((data) => DateTime.parse(data.date))
           .reduce((a, b) => a.isAfter(b) ? a : b);
-      return allLottoData
+
+      // กรองข้อมูลตามวันที่ล่าสุดและรางวัลที่ 1
+      List<LottoGetResponse> filteredData = allLottoData
           .where((data) =>
               DateTime.parse(data.date).isAtSameMomentAs(mostRecentDate) &&
               data.prize == 1)
           .toList();
+
+      if (filteredData.isEmpty) {
+        // ถ้าข้อมูลที่กรองแล้วว่างเปล่าให้คืนค่ารายการว่าง
+        return [];
+      }
+
+      return filteredData;
     }
+
     throw Exception('Failed to load lotto data');
   }
 

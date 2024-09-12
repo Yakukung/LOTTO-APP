@@ -411,19 +411,22 @@ class _LoginPageState extends State<LoginPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              TextButton(
-                                child: const Text(
-                                  'ตกลง',
-                                  style: TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: Color(0xFF007AFF),
+                              Container(
+                                width: 250,
+                                child: TextButton(
+                                  child: const Text(
+                                    'ตกลง',
+                                    style: TextStyle(
+                                      fontFamily: 'SukhumvitSet',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: Color(0xFF007AFF),
+                                    ),
                                   ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
                               ),
                             ],
                           ),
