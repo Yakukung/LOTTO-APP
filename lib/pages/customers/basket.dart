@@ -907,7 +907,7 @@ class _BasketPageState extends State<BasketPage> {
                                     'lid': item.lid,
                                     'uid': widget.uid,
                                     'quantity': item.quantity,
-                                    'total_price': item.price * item.quantity
+                                    'total_price': item.price * item.quantity,
                                   }),
                                 );
 

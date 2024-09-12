@@ -115,11 +115,30 @@ class _MyLottoPageState extends State<MyLottoPage> {
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 }
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Center(
+                        child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        'คุณยังไม่มีการซื้อ​LOTTO',
+                        style: TextStyle(
+                          fontFamily: 'SukhumvitSet',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Color(0xFF000000),
+                        ),
+                      ),
+                    )),
+                  );
+                }
                 if (snapshot.hasData) {
                   _allLottoList = snapshot.data!;
                   if (_filteredLottoList.isEmpty) {
                     _filteredLottoList = List.from(_allLottoList);
                   }
+
                   return ListView.builder(
                     itemCount: _filteredLottoList.length,
                     itemBuilder: (context, index) {
@@ -265,8 +284,11 @@ class _MyLottoPageState extends State<MyLottoPage> {
       return (jsonDecode(response.body) as List)
           .map((data) => MyLottoGetResponse.fromJson(data))
           .toList();
+    } else if (response.statusCode == 404) {
+      print('No data found for the given UID.');
+      return [];
     } else {
-      throw Exception('Failed to load lotto data');
+      throw Exception('Failed to load lotto list data: ${response.statusCode}');
     }
   }
 
@@ -567,11 +589,21 @@ class _MyLottoPageState extends State<MyLottoPage> {
                                     }),
                                   );
                                   if (updateResponse.statusCode == 200) {
-                                    print('ยอด wallet เพิ่มขึ้น $wallet');
                                     final response = await http.delete(
                                       Uri.parse(
                                           '$API_ENDPOINT/get-wallet/$lid'),
                                     );
+                                    final wallet_list = await http.put(
+                                      Uri.parse(
+                                          '$API_ENDPOINT/topup_wallet/${widget.uid}'),
+                                      headers: {
+                                        'Content-Type': 'application/json'
+                                      },
+                                      body: jsonEncode({'wallet': wallet}),
+                                    );
+                                    if (wallet_list.statusCode == 200) {
+                                      print('ยอด wallet เพิ่มขึ้น $wallet');
+                                    }
                                     if (response.statusCode == 200) {
                                       print('ลบ LOTTO ใน My LOTTO เรียบร้อย');
                                       Navigator.of(context).pop();

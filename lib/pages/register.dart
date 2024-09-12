@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lotto_app/animation/AnimatedCheckmark.dart';
 import 'package:lotto_app/config/internal_config.dart';
 import 'package:lotto_app/model/Request/UsersRegisterPostRequest.dart';
 import 'package:http/http.dart' as http;
+import 'package:lotto_app/pages/intro.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -550,7 +552,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  Get.to(() => IntroPage());
                                 },
                               ),
                             ],
