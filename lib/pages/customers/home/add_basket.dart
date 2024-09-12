@@ -381,12 +381,12 @@ class _AddBasketPageState extends State<AddBasketPage> {
               ),
             );
             Timer? _popDebounce;
+            Navigator.of(context).pop();
 
             void _safePop(BuildContext context) {
               if (_popDebounce?.isActive ?? false) {
                 return; // Skip pop if a previous debounce is still active
               }
-              Navigator.of(context).pop();
               _popDebounce = Timer(Duration(milliseconds: 500), () {
                 // Timer completed, can accept another pop request
               });
@@ -466,12 +466,13 @@ class _AddBasketPageState extends State<AddBasketPage> {
               ),
             );
             Timer? _popDebounce;
+            Navigator.of(context).pop();
 
             void _safePop(BuildContext context) {
               if (_popDebounce?.isActive ?? false) {
                 return; // Skip pop if a previous debounce is still active
               }
-              Navigator.of(context).pop();
+
               _popDebounce = Timer(Duration(milliseconds: 500), () {
                 // Timer completed, can accept another pop request
               });
