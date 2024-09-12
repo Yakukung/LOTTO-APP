@@ -380,6 +380,17 @@ class _AddBasketPageState extends State<AddBasketPage> {
                 ),
               ),
             );
+            Timer? _popDebounce;
+
+            void _safePop(BuildContext context) {
+              if (_popDebounce?.isActive ?? false) {
+                return; // Skip pop if a previous debounce is still active
+              }
+              Navigator.of(context).pop();
+              _popDebounce = Timer(Duration(milliseconds: 500), () {
+                // Timer completed, can accept another pop request
+              });
+            }
           } else {
             print('Failed to update basket: ${updateResponse.body}');
           }
@@ -454,6 +465,17 @@ class _AddBasketPageState extends State<AddBasketPage> {
                 ),
               ),
             );
+            Timer? _popDebounce;
+
+            void _safePop(BuildContext context) {
+              if (_popDebounce?.isActive ?? false) {
+                return; // Skip pop if a previous debounce is still active
+              }
+              Navigator.of(context).pop();
+              _popDebounce = Timer(Duration(milliseconds: 500), () {
+                // Timer completed, can accept another pop request
+              });
+            }
           } else {
             print('Failed to add to basket: ${response.body}');
           }
