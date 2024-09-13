@@ -40,462 +40,458 @@ class _ProfileUserState extends State<ProfileUser> {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     double customPadding = isPortrait ? 20.0 : 60.0;
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(),
-        body: FutureBuilder<UsersLoginPostResponse>(
-          future: userFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator()); // แสดงการโหลด
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              var user = snapshot.data!;
-              usernameCtl.text = user.username;
-              fullnameCtl.text = user.fullname;
-              emailCtl.text = user.email;
-              phoneCtl.text = user.phone;
-              passwordCtl.text = user.password.toString();
-              imageCtl.text = user.image.toString();
-              walletCtl.text = user.wallet.toString();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(),
+      body: FutureBuilder<UsersLoginPostResponse>(
+        future: userFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator()); // แสดงการโหลด
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            var user = snapshot.data!;
+            usernameCtl.text = user.username;
+            fullnameCtl.text = user.fullname;
+            emailCtl.text = user.email;
+            phoneCtl.text = user.phone;
+            passwordCtl.text = user.password.toString();
+            imageCtl.text = user.image.toString();
+            walletCtl.text = user.wallet.toString();
 
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: 0,
-                      bottom: customPadding,
-                      left: customPadding,
-                      right: customPadding),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: 0,
+                    bottom: customPadding,
+                    left: customPadding,
+                    right: customPadding),
+                child: Container(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            width: 115,
+                            height: 35,
+                            child: FilledButton(
+                              onPressed: deleteUser,
+                              style: FilledButton.styleFrom(
+                                backgroundColor: const Color(0xFFF92A47),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                              ),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .center, // Center content horizontally
+                                children: [
+                                  Icon(Icons.delete_rounded,
+                                      color: Color(0xFFFFFFFF), size: 18),
+                                  SizedBox(width: 3),
+                                  Text('ลบบัญชีผู้ใช้',
+                                      style: TextStyle(
+                                        fontFamily: 'SukhumvitSet',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: Color(0xFFFFFFFF),
+                                      )), // Ensure text color matches
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      SizedBox(
+                        width: 164,
+                        height: 164,
+                        child: ClipOval(
+                          child: (user.image?.isNotEmpty ?? false) &&
+                                  Uri.tryParse(user.image ?? '')?.isAbsolute ==
+                                      true
+                              ? Image.network(
+                                  user.image!,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return _buildDefaultImage();
+                                  },
+                                )
+                              : _buildDefaultImage(),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: customPadding,
+                            left: customPadding,
+                            right: customPadding),
+                        child: Row(
                           children: [
-                            SizedBox(
-                              width: 115,
-                              height: 35,
-                              child: FilledButton(
-                                onPressed: deleteUser,
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: const Color(0xFFF92A47),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(13),
+                            const Text(
+                              'ชื่อผู้ใช้',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: usernameCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.username,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
+                                  ),
                                 ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .center, // Center content horizontally
-                                  children: [
-                                    Icon(Icons.delete_rounded,
-                                        color: Color(0xFFFFFFFF), size: 18),
-                                    SizedBox(width: 3),
-                                    Text('ลบบัญชีผู้ใช้',
-                                        style: TextStyle(
-                                          fontFamily: 'SukhumvitSet',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                          color: Color(0xFFFFFFFF),
-                                        )), // Ensure text color matches
-                                  ],
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 10),
-                        SizedBox(
-                          width: 164,
-                          height: 164,
-                          child: ClipOval(
-                            child: (user.image?.isNotEmpty ?? false) &&
-                                    Uri.tryParse(user.image ?? '')
-                                            ?.isAbsolute ==
-                                        true
-                                ? Image.network(
-                                    user.image!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return _buildDefaultImage();
-                                    },
-                                  )
-                                : _buildDefaultImage(),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 10,
-                              bottom: customPadding,
-                              left: customPadding,
-                              right: customPadding),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'ชื่อผู้ใช้',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: usernameCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.username,
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 5,
-                              bottom: customPadding,
-                              left: customPadding,
-                              right: customPadding),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'ชื่อสกุล',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: fullnameCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.fullname,
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 5,
-                              bottom: customPadding,
-                              left: customPadding,
-                              right: customPadding),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'อีเมล',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: emailCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.email,
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 5,
-                              bottom: customPadding,
-                              left: customPadding,
-                              right: customPadding),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'โทรศัพท์',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: phoneCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.phone,
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 5,
-                              bottom: customPadding,
-                              left: customPadding,
-                              right: customPadding),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'รหัสผ่าน',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: passwordCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.password,
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(
-                              customPadding, 5, customPadding, 5),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'รูปภาพUrl',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: imageCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.image == null ||
-                                            user.image!.trim().isEmpty
-                                        ? 'ใส่ Url รูปภาพที่นี่'
-                                        : user.image,
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 15,
-                              bottom: customPadding,
-                              left: customPadding,
-                              right: customPadding),
-                          child: Row(
-                            children: [
-                              const Text(
-                                'wallet',
-                                style: TextStyle(
-                                  fontFamily: 'SukhumvitSet',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Color(0xFF000000),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: TextField(
-                                  controller: walletCtl,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color(0xFFF5F5F7),
-                                    hintText: user.wallet.toString(),
-                                    hintStyle: const TextStyle(
-                                      fontFamily: 'SukhumvitSet',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      color: Color(0xFF7B7B7C),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(18),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontFamily: 'SukhumvitSet',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Color(0xFF000000),
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: customPadding,
+                            left: customPadding,
+                            right: customPadding),
+                        child: Row(
                           children: [
-                            Container(
-                              width: 80,
-                              height: 80,
-                              child: TextButton(
-                                onPressed: saveEdit,
-                                child: Text(
-                                  'บันทึก',
-                                  style: TextStyle(
+                            const Text(
+                              'ชื่อสกุล',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: fullnameCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.fullname,
+                                  hintStyle: const TextStyle(
                                     fontFamily: 'SukhumvitSet',
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.red,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
                                   ),
                                 ),
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 50),
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: customPadding,
+                            left: customPadding,
+                            right: customPadding),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'อีเมล',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: emailCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.email,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: customPadding,
+                            left: customPadding,
+                            right: customPadding),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'โทรศัพท์',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: phoneCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.phone,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 5,
+                            bottom: customPadding,
+                            left: customPadding,
+                            right: customPadding),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'รหัสผ่าน',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: passwordCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.password,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            customPadding, 5, customPadding, 5),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'รูปภาพUrl',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: imageCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.image == null ||
+                                          user.image!.trim().isEmpty
+                                      ? 'ใส่ Url รูปภาพที่นี่'
+                                      : user.image,
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 15,
+                            bottom: customPadding,
+                            left: customPadding,
+                            right: customPadding),
+                        child: Row(
+                          children: [
+                            const Text(
+                              'wallet',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Color(0xFF000000),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextField(
+                                controller: walletCtl,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFF5F5F7),
+                                  hintText: user.wallet.toString(),
+                                  hintStyle: const TextStyle(
+                                    fontFamily: 'SukhumvitSet',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Color(0xFF7B7B7C),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Color(0xFF000000),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            width: 80,
+                            height: 80,
+                            child: TextButton(
+                              onPressed: saveEdit,
+                              child: Text(
+                                'บันทึก',
+                                style: TextStyle(
+                                  fontFamily: 'SukhumvitSet',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 50),
+                    ],
                   ),
                 ),
-              );
-            } else {
-              return Center(child: Text('No data available'));
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return Center(child: Text('No data available'));
+          }
+        },
       ),
     );
   }
