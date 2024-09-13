@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
 import 'package:lotto_app/nav/navbar.dart';
 import 'package:lotto_app/nav/navbottomAdmin.dart';
@@ -26,6 +29,7 @@ class _ManageUserState extends State<ManageUser> {
   List<UsergetAlldata> userGetResponses = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String url = '';
+  TextEditingController setWalletCtl = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -88,13 +92,14 @@ class _ManageUserState extends State<ManageUser> {
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                            padding: EdgeInsets.only(left: 15, top: 5),
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, top: 5, right: 15),
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'มาจัดการคนซื้อหวยกันเถอะ!',
                                     style: TextStyle(
                                       fontFamily: 'SukhumvitSet',
@@ -103,7 +108,7 @@ class _ManageUserState extends State<ManageUser> {
                                       color: Color(0xFF7B7B7C),
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'จัดการข้อมูลสมาชิก',
                                     style: TextStyle(
                                       fontFamily: 'SukhumvitSet',
@@ -112,6 +117,55 @@ class _ManageUserState extends State<ManageUser> {
                                       color: Color(0xFF000000),
                                     ),
                                   ),
+                                  SizedBox(height: 5),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          SizedBox(
+                                            width: 220,
+                                            child: ElevatedButton(
+                                              onPressed: _setWallet,
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    const Color(0xFFF92A47),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                              ),
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.edit_rounded,
+                                                      color: Colors.white,
+                                                      size: 20),
+                                                  SizedBox(width: 3),
+                                                  Text(
+                                                    'กำหนดค่าเริ่มต้น Wallet',
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          'SukhumvitSet',
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                      color: Color(0xFFFFFFFF),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
                                 ])),
                         FutureBuilder<List<UsergetAlldata>>(
                           future: loadAlldataUser,
@@ -129,9 +183,8 @@ class _ManageUserState extends State<ManageUser> {
                             return Center(
                               child: Container(
                                 child: Wrap(
-                                  spacing: 5.0, // ระยะห่างระหว่างการ์ดในแนวนอน
-                                  runSpacing:
-                                      5.0, // ระยะห่างระหว่างการ์ดในแนวตั้ง
+                                  spacing: 5.0,
+                                  runSpacing: 5.0,
                                   children:
                                       List.generate(users.length, (index) {
                                     final user = users[index];
@@ -160,23 +213,16 @@ class _ManageUserState extends State<ManageUser> {
                                                   const Icon(
                                                     Icons.wallet,
                                                     color: Color.fromARGB(
-                                                        228,
-                                                        226,
-                                                        174,
-                                                        15), // ตั้งค่าสีของไอคอน
+                                                        228, 226, 174, 15),
                                                   ),
                                                   const SizedBox(
-                                                    width:
-                                                        3, // เพิ่มระยะห่างระหว่างไอคอนและข้อความ
+                                                    width: 3,
                                                   ),
                                                   Text(
                                                     '${user.wallet}',
                                                     style: const TextStyle(
                                                       color: Color.fromARGB(
-                                                          228,
-                                                          226,
-                                                          174,
-                                                          15), // ตั้งค่าสีของข้อความ
+                                                          228, 226, 174, 15),
                                                     ),
                                                   ),
                                                   const Spacer(),
@@ -283,5 +329,219 @@ class _ManageUserState extends State<ManageUser> {
 
   void _showProfile(int uid) {
     Get.to(() => ProfileUser(uid: uid));
+  }
+
+  Future<void> _setWallet() async {
+    final setWalletCtl = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            Container(
+              height: 380,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(35),
+                  topRight: Radius.circular(35),
+                ),
+              ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 80,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                  Text(
+                    'กำหนดค่าเริ่มต้น Wallet',
+                    style: TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'คุณสามารถกำหนดค่าเริ่มต้น Wallet ได้ที่นี่',
+                    style: TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // ช่องกรอกข้อความ
+                  TextField(
+                    controller: setWalletCtl,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color(0xFFF5F5F7),
+                      hintText: 'ใส่จำนวนที่ต้องการ',
+                      hintStyle: const TextStyle(
+                        fontFamily: 'SukhumvitSet',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.wallet_rounded,
+                        color: Colors.black,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(18),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      fontFamily: 'SukhumvitSet',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                    onChanged: (value) {},
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'ยกเลิก',
+                          style: TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          final setWallet = setWalletCtl.text;
+                          if (setWallet.isEmpty ||
+                              double.tryParse(setWallet) == null) {
+                            Get.snackbar(
+                              '',
+                              '',
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Color(0xFFF92A47),
+                              margin: EdgeInsets.all(30),
+                              borderRadius: 22,
+                              titleText: Text(
+                                'แก้ไขไม่สำเร็จ!!',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFFFFFFF),
+                                  fontFamily: 'SukhumvitSet',
+                                ),
+                              ),
+                              messageText: Text(
+                                'กรุณาใส่ตัวเลขเพื่อกำหนดค่าเริ่มต้น Wallet',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'SukhumvitSet',
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          var config = await Configuration.getConfig();
+                          var url = config['apiEndpoint'];
+                          var body = jsonEncode({
+                            'wallet': setWallet,
+                          });
+
+                          var res = await http.put(
+                            Uri.parse('$url/set-wallet'),
+                            headers: {'Content-Type': 'application/json'},
+                            body: body,
+                          );
+
+                          if (res.statusCode == 200) {
+                            log('อัพเดตข้อมูลเรียบร้อย');
+                            Get.snackbar(
+                              '',
+                              '',
+                              snackPosition: SnackPosition.TOP,
+                              backgroundColor: Colors.blue,
+                              margin: EdgeInsets.all(30),
+                              borderRadius: 22,
+                              titleText: Text(
+                                'กำหนดค่าเริ่มต้น Wallet สำเร็จ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFFFFFFF),
+                                  fontFamily: 'SukhumvitSet',
+                                ),
+                              ),
+                              messageText: Text(
+                                'ยอด Wallet เริ่มต้น ${setWallet}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'SukhumvitSet',
+                                ),
+                              ),
+                            );
+                            setState(() {
+                              loadDataUser = fetchUserData();
+                            });
+                            Navigator.of(context).pop();
+                          } else {
+                            log('อัพเดตข้อมูลไม่ได้');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'อัพเดตข้อมูลไม่ได้ : ${res.reasonPhrase}')),
+                            );
+                          }
+                        },
+                        child: Text(
+                          'ยืนยัน',
+                          style: TextStyle(
+                            fontFamily: 'SukhumvitSet',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
