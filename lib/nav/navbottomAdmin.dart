@@ -43,11 +43,19 @@ class _NavBottomState extends State<NavBottom> {
 
   @override
   Widget build(BuildContext context) {
+    double customPadding;
+    Orientation orientation = MediaQuery.of(context).orientation;
+
+    if (orientation == Orientation.portrait) {
+      customPadding = 130.0;
+    } else {
+      customPadding = 100.0;
+    }
     return ClipRect(
         child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
       child: Container(
-        height: 100,
+        height: customPadding,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.1),
         ),

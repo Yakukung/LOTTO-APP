@@ -42,7 +42,9 @@ class _ProfileUserState extends State<ProfileUser> {
     double customPadding = isPortrait ? 20.0 : 60.0;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
       body: FutureBuilder<UsersLoginPostResponse>(
         future: userFuture,
         builder: (context, snapshot) {
@@ -571,143 +573,152 @@ class _ProfileUserState extends State<ProfileUser> {
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true, // เพิ่มเพื่อให้ BottomSheet ปรับความสูงได้
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                child: Container(
-                  color: Colors.transparent,
+        return Padding(
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context)
+                  .viewInsets
+                  .bottom), // จัดการระยะห่างของแป้นพิมพ์
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              height: 280,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(35),
-                  topRight: Radius.circular(35),
+              Container(
+                height: 280,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35),
+                    topRight: Radius.circular(35),
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    'ยืนยันอัพเดตข้อมูลผู้ใช้',
-                    style: TextStyle(
-                      fontFamily: 'SukhumvitSet',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'คุณต้องการอัพเดตข้อมูลใช่ไหม?',
-                    style: TextStyle(
-                      fontFamily: 'SukhumvitSet',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                padding: const EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          'ยกเลิก',
-                          style: TextStyle(
-                            fontFamily: 'SukhumvitSet',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+                      Container(
+                        width: 80,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          var res = await http.put(
-                            Uri.parse(
-                                '$url/customers/detail/update/${widget.uid}'),
-                            headers: {'Content-Type': 'application/json'},
-                            body: body,
-                          );
-
-                          if (res.statusCode == 200) {
-                            log('อัพเดตข้อมูลเรียบร้อย');
-                            Get.snackbar(
-                              '',
-                              '',
-                              snackPosition: SnackPosition.BOTTOM,
-                              backgroundColor: Colors.blue,
-                              margin: EdgeInsets.all(30),
-                              borderRadius: 22,
-                              titleText: Text(
-                                'อัพเดตข้อมูลสำเร็จ',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFFFFFFFF),
-                                  fontFamily: 'SukhumvitSet',
-                                ),
-                              ),
-                              messageText: Text(
-                                'แก้ไขข้อมูลของคุณเรียบร้อย',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'SukhumvitSet',
-                                ),
-                              ),
-                            );
-                            setState(() {
-                              userFuture = fetchUserData();
-                            });
-                            Navigator.of(context).pop();
-                          } else {
-                            log('อัพเดตข้อมูลไม่ได้');
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text(
-                                      'อัพเดตข้อมูลไม่ได้ : ${res.reasonPhrase}')),
-                            );
-                          }
-                        },
-                        child: const Text(
-                          'อัพเดตข้อมูลผู้ใช้',
-                          style: TextStyle(
-                            fontFamily: 'SukhumvitSet',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.blue,
-                          ),
+                      const SizedBox(height: 30),
+                      const Text(
+                        'ยืนยันอัพเดตข้อมูลผู้ใช้',
+                        style: TextStyle(
+                          fontFamily: 'SukhumvitSet',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.black,
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'คุณต้องการอัพเดตข้อมูลใช่ไหม?',
+                        style: TextStyle(
+                          fontFamily: 'SukhumvitSet',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'ยกเลิก',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              var res = await http.put(
+                                Uri.parse(
+                                    '$url/admin/update/profile/user/${widget.uid}'),
+                                headers: {'Content-Type': 'application/json'},
+                                body: body,
+                              );
+
+                              if (res.statusCode == 200) {
+                                log('อัพเดตข้อมูลเรียบร้อย');
+                                Get.snackbar(
+                                  '',
+                                  '',
+                                  snackPosition: SnackPosition.TOP,
+                                  backgroundColor: Colors.blue,
+                                  margin: EdgeInsets.all(30),
+                                  borderRadius: 22,
+                                  titleText: Text(
+                                    'อัพเดตข้อมูลสำเร็จ',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFFFFFFF),
+                                      fontFamily: 'SukhumvitSet',
+                                    ),
+                                  ),
+                                  messageText: Text(
+                                    'แก้ไขข้อมูลของคุณเรียบร้อย',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'SukhumvitSet',
+                                    ),
+                                  ),
+                                );
+                                setState(() {
+                                  userFuture = fetchUserData();
+                                });
+                                Navigator.of(context).pop();
+                              } else {
+                                log('อัพเดตข้อมูลไม่ได้');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          'อัพเดตข้อมูลไม่ได้ : ${res.reasonPhrase}')),
+                                );
+                              }
+                            },
+                            child: const Text(
+                              'อัพเดตข้อมูลผู้ใช้',
+                              style: TextStyle(
+                                fontFamily: 'SukhumvitSet',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.blue,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );

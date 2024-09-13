@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+    MediaQuery.of(context).size.height;
     double customPadding = isPortrait ? 20.0 : 60.0;
 
     double cardWidth = isPortrait

@@ -12,6 +12,11 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double bottomPadding = screenHeight * 0.08;
+    final double buttonWidth = screenWidth * 0.8;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -62,7 +67,7 @@ class _IntroPageState extends State<IntroPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 30),
+              padding: EdgeInsets.only(bottom: bottomPadding),
               child: Column(
                 children: [
                   ElevatedButton(
@@ -72,7 +77,7 @@ class _IntroPageState extends State<IntroPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      minimumSize: const Size(300, 50),
+                      minimumSize: Size(buttonWidth, 50),
                     ),
                     child: const Text(
                       'เข้าสู่ระบบ',
@@ -91,7 +96,7 @@ class _IntroPageState extends State<IntroPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      minimumSize: const Size(300, 50),
+                      minimumSize: Size(buttonWidth, 50),
                     ),
                     child: const Text(
                       'ลงทะเบียน',
