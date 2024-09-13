@@ -782,7 +782,7 @@ class _AdminhomePageState extends State<AdminhomePage> {
                   ),
                   SizedBox(height: 30),
                   Text(
-                    'ยืนยันการสุ่มรางวัล',
+                    'ยืนยันการสุ่มรางวัลที่ $prizeValue ',
                     style: TextStyle(
                       fontFamily: 'SukhumvitSet',
                       fontWeight: FontWeight.bold,
