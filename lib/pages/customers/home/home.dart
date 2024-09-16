@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:lotto_app/config/config.dart';
 import 'package:lotto_app/config/internal_config.dart';
@@ -7,6 +9,7 @@ import 'package:lotto_app/model/Response/LottoGetResponse.dart';
 import 'package:lotto_app/model/Response/UsersLoginPostResponse.dart';
 import 'package:lotto_app/nav/navbar.dart';
 import 'package:lotto_app/nav/navbottom.dart';
+import 'package:lotto_app/pages/intro.dart';
 import 'package:lotto_app/sidebar/CustomerSidebar.dart';
 import 'package:lotto_app/pages/customers/home/add_basket.dart';
 
@@ -424,12 +427,38 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<UsersLoginPostResponse> fetchUserData() async {
-    final response =
-        await http.get(Uri.parse('$API_ENDPOINT/customers/${widget.uid}'));
-    if (response.statusCode == 200) {
-      return UsersLoginPostResponse.fromJson(json.decode(response.body));
+    try {
+      final response =
+          await http.get(Uri.parse('$API_ENDPOINT/customers/${widget.uid}'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data != null && data.isNotEmpty) {
+          return UsersLoginPostResponse.fromJson(data);
+        } else {
+          await _clearStorageAndNavigate();
+          throw Exception('No user data available');
+        }
+      } else {
+        throw Exception('Failed to load user data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      await _clearStorageAndNavigate();
+      rethrow;
     }
-    throw Exception('Failed to load user data');
+  }
+
+  Future<void> _clearStorageAndNavigate() async {
+    try {
+      GetStorage gs = GetStorage();
+      await gs.erase();
+      print('Storage cleared successfully');
+    } catch (e) {
+      print('Error clearing storage: $e');
+    } finally {
+      Get.offAll(() => IntroPage());
+    }
   }
 
   Future<List<LottoGetResponse>> loadDataLottoPrizeAsync() async {
